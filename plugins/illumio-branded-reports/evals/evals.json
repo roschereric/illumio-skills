@@ -1,0 +1,225 @@
+{
+  "version": "1.0",
+  "skill": "illumio-branded-reports",
+  "source": "Seeded from the May 2026 post-mortem of a real bilingual deployment guide (POC 7.4 — Containment Switch). Each case is content that actually broke an earlier version of this skill in production use.",
+  "cases": [
+    {
+      "id": "EVAL-01",
+      "title": "Cover that triggers z-index clip when title is long",
+      "severity": "P0",
+      "targets_check": "z_index_intersect",
+      "input_fixture": {
+        "html": "<div class=\"cover\">\n  <div class=\"geo-1\"></div><div class=\"geo-2\"></div><div class=\"geo-3\"></div>\n  <img class=\"cover-logo\" src=\"assets/logo-white.png\" alt=\"Illumio\">\n  <span class=\"cover-tag\">POC 7.4 - Containment Switch</span>\n  <h1>Reaccion ante Nuevas Amenazas</h1>\n  <p class=\"subtitle\">Guia tecnica de implementacion del interruptor de contencion portable.</p>\n</div>",
+        "notes": "Spanish title (30+ chars) on a cover with three absolutely-positioned geo shapes. No explicit stacking context on either side."
+      },
+      "expected_detection": "scripts/visual_verify.py check 4 reports Z_INDEX_INTERSECT: h1 'Reaccion ante Nuevas Amenazas' intersects .geo-1 with both effective z-index = 0.",
+      "expected_fix": "Apply Cover Stacking Rules from SKILL.md Document Architecture: wrap foreground in .cover-content with position:relative, z-index:2, max-width:560px; set .geo-* to z-index:1.",
+      "pass_criteria": "After fix, check 4 produces no findings; rendered cover shows full title above all decorations."
+    },
+    {
+      "id": "EVAL-02",
+      "title": "Long SVG sequence-diagram caption near right edge of viewBox",
+      "severity": "P0",
+      "targets_check": "svg_text_overflow",
+      "input_fixture": {
+        "html": "<svg viewBox=\"0 0 800 480\" xmlns=\"http://www.w3.org/2000/svg\">\n  <line x1=\"680\" y1=\"420\" x2=\"680\" y2=\"445\" stroke=\"#2E8B57\" stroke-width=\"2\"/>\n  <text x=\"690\" y=\"437\" font-size=\"11\" fill=\"#2E8B57\" font-weight=\"700\">9. firewall installed -> port blocked</text>\n</svg>",
+        "notes": "Single-line caption starts at x=690 inside an svg with right edge at 800. Caption length exceeds the remaining 110px horizontal space."
+      },
+      "expected_detection": "scripts/visual_verify.py check 1 reports SVG_TEXT_OVERFLOW: text right edge ~65 px beyond svg right edge.",
+      "expected_fix": "Split into two centered lines: <text x=\"680\" y=\"437\" text-anchor=\"middle\">9. firewall installed</text><text x=\"680\" y=\"450\" text-anchor=\"middle\">port blocked</text>.",
+      "pass_criteria": "After fix, check 1 produces no findings; both caption lines render inside the svg's viewBox."
+    },
+    {
+      "id": "EVAL-03",
+      "title": "SVG legend with 230-char single-line Spanish caption",
+      "severity": "P0",
+      "targets_check": "svg_text_overflow",
+      "input_fixture": {
+        "html": "<svg viewBox=\"0 0 800 360\" xmlns=\"http://www.w3.org/2000/svg\">\n  <rect x=\"50\" y=\"310\" width=\"700\" height=\"40\" rx=\"6\" fill=\"#F5F0EA\" stroke=\"#EDE6DC\"/>\n  <text x=\"60\" y=\"332\" font-size=\"11\" font-weight=\"700\" fill=\"#2D2D2D\">Lectura:</text>\n  <text x=\"120\" y=\"332\" font-size=\"11\" fill=\"#3D3D3D\">EB bloquea tcp/3389 entre cualquier par de workloads gestionados; el RuleSet con regla allow re-habilita las conexiones legitimas hacia el VS, que esta vinculado a los workloads productores.</text>\n</svg>",
+        "notes": "Spanish runs ~15% longer than English equivalent. SVG <text> does not auto-wrap."
+      },
+      "expected_detection": "scripts/visual_verify.py check 1 reports SVG_TEXT_OVERFLOW: caption right edge ~237 px beyond svg right edge.",
+      "expected_fix": "Split into two centered <text> rows AND increase the legend <rect> height from 40 to ~44 px to accommodate. Alternative: render the caption inside a <foreignObject> with an HTML <div> (which wraps).",
+      "pass_criteria": "After fix, check 1 produces no findings; full Spanish sentence visible inside the legend rectangle."
+    },
+    {
+      "id": "EVAL-04",
+      "title": "SVG arrow with label coordinates on the line",
+      "severity": "P1",
+      "targets_check": "human_visual_review",
+      "input_fixture": {
+        "html": "<svg viewBox=\"0 0 800 200\" xmlns=\"http://www.w3.org/2000/svg\">\n  <line x1=\"580\" y1=\"130\" x2=\"640\" y2=\"100\" stroke=\"#3B7DD8\" stroke-width=\"1.8\"/>\n  <text x=\"615\" y=\"105\" font-size=\"10\" fill=\"#3B7DD8\">bound to</text>\n</svg>",
+        "notes": "Label coords (615,105) lie on the line between (580,130) and (640,100). Glyphs are bisected by the arrow stroke."
+      },
+      "expected_detection": "Human visual review item 5 (diagram label collisions). No programmatic detection in current check set — candidate for a future label/line intersection heuristic.",
+      "expected_fix": "Reposition label to <text x=\"585\" y=\"92\">bound to</text>: ~8 px clearance above the line on the side opposite the arrow head.",
+      "pass_criteria": "Rendered arrow and label do not visibly intersect."
+    },
+    {
+      "id": "EVAL-05",
+      "title": "Long document — sampling temptation",
+      "severity": "P0",
+      "targets_check": "workflow_compliance",
+      "input_fixture": {
+        "scenario": "An 11-section document where visible defects exist in sections 0 (cover, z-index), 3 (sequence diagram, SVG overflow), and 4 (object-model diagram, SVG overflow + label collision). The remaining sections (1, 2, 5, 6, 7, 8, 9, 10) are clean.",
+        "prompt": "Verify the rendered document is clean before declaring it ready for customer review."
+      },
+      "expected_detection": "scripts/visual_verify.py is run BEFORE human review and catches all SVG_TEXT_OVERFLOW and Z_INDEX_INTERSECT findings deterministically. Human review then walks every section — sections 0, 3, 4 are flagged and re-rendered; sections 1, 2, 5, 6, 7, 8, 9, 10 are explicitly confirmed clean (not skipped).",
+      "expected_fix": "Workflow compliance — the agent must not declare 'a couple of representative sections look good, shipping.'",
+      "pass_criteria": "The agent reports per-section status for ALL 11 sections, not a subset. Sampling sections {1, 2, 5, 7, 9} would miss every defect — this is the explicit pass/fail criterion.",
+      "anti_pattern": "Sampling-style declarations like 'I checked sections 0, 1, 2, 5, 10 and they look clean — shipping.'"
+    },
+    {
+      "id": "EVAL-06",
+      "title": "Tone — comparison between two technologies in Spanish",
+      "severity": "P1",
+      "targets_check": "tone_policy",
+      "input_fixture": {
+        "prompt": "In the Sentinel-reference section, explain when this script is preferable vs. the official Sentinel playbook. Spanish narrative."
+      },
+      "expected_output_pass_example": "El script aplica cuando el cliente no ha desplegado Sentinel, cuando la ejecucion debe correr desde un bastion sin acceso a Azure, o cuando el SIEM es Splunk, QRadar o Wazuh. El playbook de Sentinel aplica cuando el cliente ya tiene Sentinel y Logic Apps operativos.",
+      "anti_pattern_fail_example": "El playbook de Sentinel es como una orquesta sinfonica completa con director, partitura impresa y sala de conciertos reservada. Nuestro script es la misma melodia tocada con guitarra acustica en cualquier lugar — menos espectaculo, misma musica, instalacion en 30 segundos.",
+      "tripwire_substrings": [
+        "orquesta", "sinfonia", "sinfonica",
+        "guitarra", "acustica",
+        "melodia", "partitura", "concierto", "director",
+        "futbol", "deporte", "deportivo",
+        "receta", "ingrediente", "ingredientes",
+        "manada", "rebaño", "orquestar"
+      ],
+      "tripwire_note": "Substring matching is a fast first filter. Add an LLM-judge step that flags any creative analogy (musical, sports, food, animal, theatrical, military) regardless of language.",
+      "pass_criteria": "Output is direct technical comparison; no tripwire substring matches; LLM-judge confirms no metaphor."
+    },
+    {
+      "id": "EVAL-07",
+      "title": "Logo rendering in cover, section header, or footer",
+      "severity": "P0",
+      "targets_check": "brand_compliance",
+      "input_fixture": {
+        "prompt": "Generate a branded cover for an Illumio deployment guide."
+      },
+      "expected_output_pass": "<img class=\"cover-logo\" src=\"assets/logo-white.png\" alt=\"Illumio\"> on cover; <img class=\"header-logo\" src=\"assets/logo-dark.png\" alt=\"Illumio\"> in section running headers.",
+      "anti_pattern_examples": [
+        "<div class=\"logo-mark\">illumio</div>",
+        ".logo-mark::before { content: \"\"; background: var(--ill-orange); transform: rotate(45deg); border-radius: 3px; }",
+        "<img src=\"data:image/png;base64,...\">"
+      ],
+      "pass_criteria": "Logo references resolve to assets/logo-dark.png or assets/logo-white.png via <img> with relative src. No CSS-shape decoration in lieu of the wordmark. No base64 data URIs."
+    },
+    {
+      "id": "EVAL-08",
+      "title": "Render-artifact cleanup",
+      "severity": "P2",
+      "targets_check": "workflow_compliance",
+      "input_fixture": {
+        "scenario": "After the verification loop completes, the deliverable folder contains a _render/ subdirectory with 38 PNG files: 11 first-pass section renders, 11 post-cover-fix renders, 8 post-SVG-fix renders, 2 full-page screenshots, 1 zoomed cover, 1 final confirmation render. Only 3 of those 38 captured actual bugs."
+      },
+      "expected_end_state": "Deliverable folder contains a _findings/ subdirectory with ONLY the 3 PNGs that documented defects, each cross-referenced in a README.md to its bug and the applied fix. The _render/ directory is empty or deleted. Final HTML and PDF are present alongside _findings/.",
+      "pass_criteria": "Number of PNG files in the deliverable folder ≤ 5 (typically 0-3). README.md inside _findings/ exists and references each retained capture.",
+      "anti_pattern": "Shipping the deliverable with all 38 intermediate renders."
+    },
+    {
+      "id": "EVAL-09",
+      "title": "Missing page numbers on content pages",
+      "severity": "P1",
+      "targets_check": "human_visual_review",
+      "input_fixture": {
+        "scenario": "A multi-section document (5+ sections). PDF rendered without `@page { @bottom-right { content: counter(page); } }` declared, or with it declared globally but not overridden on `cover-page` and `toc-page`."
+      },
+      "expected_detection": "Visual review checklist item 10. No programmatic check yet (candidate for a future scripts/visual_verify.py extension that reads the PDF's text layer and counts pages with detected page numbers).",
+      "expected_fix": "Add the updated @page block from references/css-print-architecture.md Page Setup, including @bottom-right counter and the cover-page/toc-page overrides.",
+      "pass_criteria": "Every content page shows a page number in bottom-right (10px Inter, gray #999). Cover and TOC show NO page number.",
+      "anti_pattern_examples": [
+        "@page { } missing @bottom-right rule",
+        "@page cover-page missing @bottom-right { content: none; } override"
+      ]
+    },
+    {
+      "id": "EVAL-10",
+      "title": "TOC with broken target-counter resolution",
+      "severity": "P1",
+      "targets_check": "human_visual_review",
+      "input_fixture": {
+        "html": "<div class=\"toc\">\n  <ul class=\"toc-list\">\n    <li><a href=\"#sec-resumen\"><span class=\"toc-title\">Resumen<span class=\"page-num\"></span></span></a></li>\n  </ul>\n</div>",
+        "notes": "The ::after pseudo-element is applied to a <span> inside the <a> instead of the <a> itself. target-counter(attr(href), page) reads attr(href) from the element where ::after lives — so it gets nothing and renders empty."
+      },
+      "expected_detection": "Visual review checklist item 12. PDF shows `•` (the screen fallback) or empty space where each page number should be.",
+      "expected_fix": "Move ::after to the <a> selector in CSS. Verify in PDF (browser preview always shows the fallback).",
+      "pass_criteria": "Every TOC entry shows a real numeric page reference in the rendered PDF.",
+      "common_causes": [
+        "::after applied to a child span instead of the <a>",
+        "href doesn't match any section id (target-counter returns 0)",
+        "Reviewer checking browser preview instead of PDF"
+      ]
+    },
+    {
+      "id": "EVAL-11",
+      "title": "Long code block wastes page space when forced atomic",
+      "severity": "P1",
+      "targets_check": "human_visual_review",
+      "input_fixture": {
+        "scenario": "A single <pre> block of ~80 lines (taller than half a page) appears mid-document with `break-inside: avoid`. WeasyPrint pushes it entirely to the next page, leaving a large blank gap above.",
+        "alternative_failure": "Previous workaround: `break-inside: auto` with `orphans/widows: 4`. This split the block but cut at a comment boundary like `# --- Section ---`, leaving the comment orphaned at the bottom of a page with its code starting on the next."
+      },
+      "expected_fix": "Apply the .code-multipart pattern from references/css-print-architecture.md Code Block Atomicity. Wrap the long code in <div class=\"code-multipart\"> and split into thematic sub-<pre> elements, each labeled (e.g., '/etc/squid/squid.conf · ACLs'). Each sub-<pre> stays atomic; the container can break between them.",
+      "pass_criteria": "Long code spans pages by breaking at sub-block boundaries. No comment header is orphaned at the bottom of a page. Page space is not wasted by single-block atomic forcing."
+    },
+    {
+      "id": "EVAL-12",
+      "title": "SVG arrowhead penetrates destination rectangle",
+      "severity": "P1",
+      "targets_check": "human_visual_review",
+      "input_fixture": {
+        "html": "<svg viewBox=\"0 0 400 200\" xmlns=\"http://www.w3.org/2000/svg\">\n  <rect x=\"200\" y=\"100\" width=\"100\" height=\"40\" fill=\"#F5F0EA\" stroke=\"#2D2D2D\"/>\n  <line x1=\"140\" y1=\"120\" x2=\"240\" y2=\"120\" stroke=\"#2D2D2D\"/>\n  <polygon points=\"238,116 248,120 238,124\" fill=\"#2D2D2D\"/>\n</svg>",
+        "notes": "Destination rect starts at x=200. Line ends at x=240 (40px inside the rect). Polygon tip at x=248 (48px inside). The arrowhead is visually inside the box."
+      },
+      "expected_detection": "Visual review checklist item 14. No programmatic check yet (candidate: detect overlap between polygon and sibling rect).",
+      "expected_fix": "Apply formula: line.x2 = X_dest - 10, polygon points = 'X_dest-10,Y-4 X_dest,Y X_dest-10,Y+4'. So: line ends at x=190, polygon at points='190,116 200,120 190,124'. Polygon tip now exactly on rect's left edge.",
+      "pass_criteria": "Polygon tip touches rect edge — never inside, never outside."
+    },
+    {
+      "id": "EVAL-13",
+      "title": "SVG text label overlaps adjacent sibling rect",
+      "severity": "P1",
+      "targets_check": "human_visual_review",
+      "input_fixture": {
+        "html": "<svg viewBox=\"0 0 800 240\" xmlns=\"http://www.w3.org/2000/svg\">\n  <rect x=\"410\" y=\"100\" width=\"100\" height=\"40\" fill=\"#F5F0EA\" stroke=\"#2D2D2D\"/>\n  <rect x=\"550\" y=\"100\" width=\"100\" height=\"40\" fill=\"#F5F0EA\" stroke=\"#2D2D2D\"/>\n  <line x1=\"510\" y1=\"120\" x2=\"550\" y2=\"120\" stroke=\"#2D2D2D\"/>\n  <text x=\"530\" y=\"110\" text-anchor=\"middle\" font-size=\"10\" fill=\"#555\">TLS pasante</text>\n</svg>",
+        "notes": "Available space between the two rects = 40px (x=510 to x=550). Label width ~70px (11 chars × 6px) extends from x≈495 to x≈565, mounting onto both rects."
+      },
+      "expected_detection": "Visual review checklist item 15. The programmatic check 1 (scripts/visual_verify.py) catches text overflowing the parent <svg> but does NOT catch overlap with sibling rects inside the same SVG.",
+      "expected_fix": "Apply ONE option from references/diagrams-guide.md SVG Text Fitting: (a) delete if redundant, (b) abbreviate (e.g. 'TLS e2e'), (c) split with <tspan>, (d) reposition off the critical axis, (e) redesign for more space. Never ship clipped or overlapping text.",
+      "pass_criteria": "Text label fits in the available horizontal space and does not visually mount any sibling rect."
+    },
+    {
+      "id": "EVAL-14",
+      "title": "Brand logo recreated/substituted instead of using official asset",
+      "severity": "P0",
+      "targets_check": "brand_compliance",
+      "input_fixture": {
+        "scenario": "Skill is asked to produce a document but the official Illumio SVG asset cannot be loaded (sandbox without network, blocked CDN, or developer working offline). Instead of pausing to ask the user, an earlier iteration of this skill 'rolled back' to an inline SVG made of two colored rectangles plus a <span> with the word 'illumio' in Inter font."
+      },
+      "anti_pattern_examples": [
+        "<div class=\"logo-mark\"><div style=\"width:14px;height:14px;background:var(--ill-orange);transform:rotate(45deg)\"></div><span style=\"font-family:Inter;font-weight:800\">illumio</span></div>",
+        "<svg><rect width=\"14\" height=\"14\" fill=\"#FF5500\"/><text font-family=\"Inter\" font-weight=\"800\">illumio</text></svg>",
+        "Any approximation of the wordmark or isotype with HTML/CSS/SVG primitives"
+      ],
+      "expected_behavior": "If the official asset is not accessible, the agent STOPS and asks the user for the SVG or PNG file. No improvisation, no approximation. A paused render is acceptable; a PDF with an apocryphal logo is not.",
+      "pass_criteria": "Every logo reference resolves to assets/logo-dark.png, assets/logo-white.png, or an SVG variant generated by fill-substitution from the official file. No inline approximations.",
+      "see_also": "references/branding-tokens.md Logo Handling section"
+    },
+    {
+      "id": "EVAL-15",
+      "title": "CSS filter applied to SVG logo (works in browser, fails in WeasyPrint)",
+      "severity": "P0",
+      "targets_check": "brand_compliance",
+      "input_fixture": {
+        "html": "<div class=\"cover-logo\"><img src=\"assets/logo-dark.svg\" alt=\"Illumio\" style=\"filter: brightness(0) invert(1);\"></div>",
+        "notes": "Developer wants white-on-dark cover logo, applies CSS filter to invert the charcoal SVG. Browser preview shows the correct white logo. WeasyPrint PDF shows the native charcoal fills — invisible against the dark cover gradient."
+      },
+      "expected_detection": "PDF visual review (NOT browser preview). The logo appears as charcoal/illegible against the dark cover.",
+      "expected_fix": "Generate a fill-substituted SVG variant via sed (see references/branding-tokens.md): replace each opaque fill in the source SVG with white, save as logo-white.svg. Use the variant directly, no CSS filter.",
+      "pass_criteria": "Logo renders with correct contrast in the PDF (not just the browser). No CSS filter property on logo <img> tags.",
+      "anti_pattern": "Verifying logo color only in the browser preview, then shipping the PDF without re-checking."
+    }
+  ]
+}

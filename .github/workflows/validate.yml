@@ -1,0 +1,121 @@
+name: validate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  manifests:
+    name: Validate manifests and frontmatter
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Lint marketplace.json
+        run: |
+          python3 -c "
+          import json, sys
+          with open('.claude-plugin/marketplace.json') as f:
+              m = json.load(f)
+          assert 'name' in m, 'marketplace.json missing name'
+          assert 'plugins' in m, 'marketplace.json missing plugins'
+          for p in m['plugins']:
+              assert 'name' in p and 'source' in p, f'plugin entry malformed: {p}'
+          print('marketplace.json OK')
+          "
+
+      - name: Lint each plugin.json
+        run: |
+          for pj in plugins/*/.claude-plugin/plugin.json; do
+            python3 -c "
+          import json
+          with open('$pj') as f:
+              p = json.load(f)
+          assert 'name' in p, '$pj missing name'
+          assert 'version' in p, '$pj missing version'
+          print('$pj OK')
+          "
+          done
+
+      - name: Validate hooks.json structure
+        run: |
+          for h in plugins/*/hooks/hooks.json; do
+            python3 -c "
+          import json
+          with open('$h') as f:
+              h = json.load(f)
+          assert 'hooks' in h, '$h missing hooks key'
+          print('$h OK')
+          "
+          done
+
+      - name: Validate SKILL.md frontmatter
+        run: |
+          for s in plugins/*/SKILL.md; do
+            python3 -c "
+          import re, sys
+          with open('$s') as f:
+              content = f.read()
+          m = re.match(r'^---\n(.*?)\n---', content, re.DOTALL)
+          assert m, '$s missing YAML frontmatter'
+          fm = m.group(1)
+          assert 'name:' in fm, '$s frontmatter missing name'
+          assert 'description:' in fm, '$s frontmatter missing description'
+          print('$s frontmatter OK')
+          "
+          done
+
+      - name: Shellcheck scripts
+        run: |
+          sudo apt-get update && sudo apt-get install -y shellcheck
+          find plugins -name '*.sh' -exec shellcheck -S warning {} +
+          find scripts -name '*.sh' -exec shellcheck -S warning {} +
+
+  render-smoke:
+    name: Smoke-render the bundled template
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libpango-1.0-0 libpangoft2-1.0-0 \
+            libcairo2 libgdk-pixbuf2.0-0 \
+            shared-mime-info
+
+      - name: Install Python packages
+        run: |
+          pip install --upgrade pip
+          pip install weasyprint playwright
+          playwright install --with-deps chromium
+
+      - name: Render the bundled template to PDF
+        working-directory: plugins/illumio-branded-reports
+        run: |
+          python3 -c "
+          from weasyprint import HTML
+          HTML(filename='template.html').write_pdf('/tmp/smoke.pdf')
+          print('PDF rendered, size:', __import__('os').path.getsize('/tmp/smoke.pdf'), 'bytes')
+          "
+
+      - name: Run visual verification on the template
+        working-directory: plugins/illumio-branded-reports
+        run: |
+          python3 scripts/visual_verify.py template.html || true
+          # Non-fatal in CI for now — template.html has placeholders so
+          # some checks may flag. Real documents must pass.
+
+      - name: Upload PDF artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: smoke-render
+          path: /tmp/smoke.pdf
+          retention-days: 7

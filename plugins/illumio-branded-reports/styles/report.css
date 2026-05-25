@@ -1,0 +1,347 @@
+/* Illumio Branded Report — print & screen CSS
+ * Extracted from template.html so reports can re-use the stylesheet
+ * without duplicating the block inline. Link it with:
+ *   <link rel="stylesheet" href="styles/report.css">
+ * When rendering with WeasyPrint, make sure the HTML's base_url
+ * resolves to the skill root so 'styles/report.css' and 'assets/logo-*.png'
+ * resolve correctly.
+ */
+
+:root {
+    --ill-orange: #E8611A;
+    --ill-orange-light: #F28C50;
+    --ill-orange-dark: #C4500F;
+    --ill-cream: #F5F0EA;
+    --ill-cream-dark: #EDE6DC;
+    --ill-charcoal: #2D2D2D;
+    --ill-gray-700: #3D3D3D;
+    --ill-gray-600: #555555;
+    --ill-gray-400: #999999;
+    --ill-gray-300: #BBBBBB;
+    --ill-white: #FFFFFF;
+    --ill-cover-dark: #3B4856;
+    --ill-cover-darker: #2B3640;
+    --ill-code-bg: #1E1E1E;
+    --ill-success: #2E8B57;
+    --ill-info-blue: #3B7DD8;
+    --ill-danger: #D63031;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    color: var(--ill-charcoal);
+    background: #fff;
+    line-height: 1.7;
+    font-size: 14px;
+  }
+
+  /* ======= COVER ======= */
+  .cover {
+    height: 100vh;
+    background: linear-gradient(135deg, var(--ill-cover-darker) 0%, var(--ill-cover-dark) 60%, #4A5A6A 100%);
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 80px;
+    position: relative; overflow: hidden;
+  }
+  .cover .geo-1 { position:absolute; top:-60px; right:80px; width:130px; height:360px; background:var(--ill-orange); transform:skewX(-8deg); opacity:0.92; }
+  .cover .geo-2 { position:absolute; top:20px; right:230px; width:90px; height:280px; background:var(--ill-orange-light); transform:skewX(-8deg); opacity:0.65; }
+  .cover .geo-3 { position:absolute; bottom:-30px; right:40px; width:70px; height:220px; background:var(--ill-orange-dark); transform:skewX(-8deg); opacity:0.55; }
+  .cover .dots { position:absolute; top:40px; right:340px; width:80px; height:80px; background-image:radial-gradient(circle,rgba(255,255,255,0.3) 1.5px,transparent 1.5px); background-size:10px 10px; }
+  .cover .dots-2 { position:absolute; bottom:80px; right:180px; width:60px; height:60px; background-image:radial-gradient(circle,rgba(232,97,26,0.5) 1.5px,transparent 1.5px); background-size:10px 10px; }
+
+  .cover-logo { position:relative; z-index:2; margin-bottom:60px; }
+  .cover-logo img { height: 40px; }
+  .cover h1 { font-size:38px; font-weight:800; color:#fff; line-height:1.15; max-width:600px; position:relative; z-index:2; margin-bottom:16px; }
+  .cover .subtitle { font-size:15px; color:rgba(255,255,255,0.7); max-width:520px; position:relative; z-index:2; margin-bottom:50px; line-height:1.6; }
+  .cover-meta { position:relative; z-index:2; display:flex; gap:40px; }
+  .cover-meta-item { color:rgba(255,255,255,0.45); font-size:11px; text-transform:uppercase; letter-spacing:0.8px; }
+  .cover-meta-item strong { display:block; color:rgba(255,255,255,0.85); font-weight:600; font-size:13px; text-transform:none; letter-spacing:0; margin-top:4px; }
+  .cover-footer { position:absolute; bottom:30px; left:80px; right:80px; display:flex; justify-content:space-between; font-size:10px; color:rgba(255,255,255,0.35); z-index:2; }
+
+  /* ======= CONTENT ======= */
+  .content-wrap {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0;
+    background: var(--ill-cream);
+  }
+  .content-wrap::before { content:''; display:block; height:4px; background:var(--ill-orange); }
+
+  .section {
+    padding: 36px 60px;
+    border-bottom: 1px solid var(--ill-cream-dark);
+  }
+  .section:last-of-type { border-bottom: none; }
+
+  .section-header {
+    display:flex; justify-content:space-between; align-items:center;
+    margin-bottom:24px; padding-bottom:12px;
+    border-bottom:1px solid var(--ill-cream-dark);
+  }
+  .section-header img { height: 22px; }
+  .section-label { font-size:11px; color:var(--ill-gray-400); text-transform:uppercase; letter-spacing:1px; }
+
+  /* ======= TYPOGRAPHY ======= */
+  h2 { font-size:24px; font-weight:800; color:var(--ill-charcoal); margin-bottom:12px; line-height:1.2; }
+  h3 { font-size:16px; font-weight:700; color:var(--ill-charcoal); margin-top:24px; margin-bottom:8px; }
+  p { margin-bottom:10px; color:var(--ill-gray-700); font-size:13.5px; }
+
+  /* ======= CALLOUTS ======= */
+  .callout { border-radius:8px; padding:14px 18px; margin:16px 0; font-size:13px; line-height:1.65; }
+  .callout-warning { background:#FFF8F0; border-left:4px solid var(--ill-orange); }
+  .callout-info { background:#F0F5FF; border-left:4px solid var(--ill-info-blue); }
+  .callout-success { background:#F0FAF5; border-left:4px solid var(--ill-success); }
+  .callout-critical { background:#FFF0F0; border-left:4px solid var(--ill-danger); }
+  .callout-label { font-weight:700; font-size:11.5px; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:4px; }
+  .callout-warning .callout-label { color:var(--ill-orange-dark); }
+  .callout-info .callout-label { color:var(--ill-info-blue); }
+  .callout-success .callout-label { color:var(--ill-success); }
+  .callout-critical .callout-label { color:var(--ill-danger); }
+
+  /* ======= CODE ======= */
+  pre {
+    background:var(--ill-code-bg); color:#D4D4D4;
+    border-radius:8px; padding:16px 20px;
+    font-family:'JetBrains Mono','Fira Code','Consolas',monospace;
+    font-size:11.5px; line-height:1.6; overflow-x:auto;
+    margin:12px 0; position:relative; border-left:4px solid var(--ill-orange);
+  }
+  pre .comment { color:#6A9955; }
+  pre .string { color:#CE9178; }
+  pre .param { color:#9CDCFE; }
+  pre .cmdlet { color:#DCDCAA; }
+  pre .variable { color:#C586C0; }
+  pre .label { position:absolute; top:6px; right:10px; font-size:9px; color:#666; text-transform:uppercase; letter-spacing:1px; font-family:'Inter',sans-serif; }
+  code { background:var(--ill-cream-dark); color:var(--ill-charcoal); padding:2px 5px; border-radius:3px; font-family:'JetBrains Mono','Fira Code','Consolas',monospace; font-size:12px; }
+
+  /* ======= STEPS ======= */
+  .step { display:flex; gap:14px; margin:18px 0; align-items:flex-start; break-inside:avoid; }
+  .step-number { flex-shrink:0; width:32px; height:32px; background:var(--ill-orange); color:#fff; border-radius:6px; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:14px; }
+  .step-content { flex:1; background:var(--ill-white); border-radius:8px; padding:14px 18px; border:1px solid var(--ill-cream-dark); }
+  .step-content h4 { font-size:14px; font-weight:700; color:var(--ill-charcoal); margin-bottom:4px; }
+  .step-content p { margin-bottom:5px; font-size:12.5px; }
+
+  /* ======= TABLE ======= */
+  table { width:100%; border-collapse:collapse; margin:14px 0; font-size:12.5px; }
+  th { background:var(--ill-charcoal); color:#fff; padding:8px 10px; text-align:left; font-weight:600; font-size:11px; text-transform:uppercase; letter-spacing:0.3px; }
+  td { padding:8px 10px; border-bottom:1px solid var(--ill-cream-dark); background:var(--ill-white); }
+  tr:nth-child(even) td { background:#FAFAF8; }
+
+  /* ======= CHECKLIST ======= */
+  .checklist { list-style:none; margin:12px 0; }
+  .checklist li { padding:7px 0 7px 28px; position:relative; border-bottom:1px solid var(--ill-cream-dark); font-size:12.5px; }
+  .checklist li:last-child { border-bottom:none; }
+  .checklist li::before { content:''; position:absolute; left:0; top:9px; width:15px; height:15px; border:2px solid var(--ill-orange); border-radius:3px; }
+
+  /* ======= DIAGRAM ======= */
+  .diagram-container { background:var(--ill-white); border:1px solid var(--ill-cream-dark); border-radius:10px; padding:22px; margin:22px 0; text-align:center; break-inside:avoid; }
+  .diagram-container .diagram-title { font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--ill-gray-400); margin-bottom:14px; font-weight:600; }
+  .diagram-container svg { max-width:100%; height:auto; }
+
+  /* ======= PHASE ======= */
+  .phase-spacer { display: none; }
+  .phase-banner { background:var(--ill-charcoal); color:#fff; padding:11px 16px; border-radius:8px; margin:28px 0 14px 0; display:flex; align-items:center; gap:12px; break-inside:avoid; break-after:avoid; }
+  .phase-banner .phase-num { background:var(--ill-orange); color:#fff; font-weight:800; padding:3px 10px; border-radius:4px; font-size:11px; }
+  .phase-banner .phase-title { font-weight:600; font-size:14px; }
+
+  /* ======= FOOTER ======= */
+  .content-footer { padding:20px 60px; display:flex; justify-content:space-between; font-size:10px; color:var(--ill-gray-300); border-top:1px solid var(--ill-cream-dark); }
+
+  /* ======= PRINT — WeasyPrint with running headers, page numbers, footer ======= */
+  @media print {
+    @page {
+      size: A4 portrait;
+      margin: 60px 0 50px 0;      /* +20px on bottom to house the footer */
+      @top-left {
+        content: element(running-header);
+        width: 100%;
+      }
+      @bottom-right {
+        content: counter(page);
+        font-family: 'Inter', sans-serif;
+        font-size: 10px;
+        font-weight: 500;
+        color: #999999;
+        padding: 0 50px 18px 0;
+      }
+      @bottom-left {
+        content: "<DOCUMENT TITLE>  ·  <SUBTITLE>";  /* Replace at build time */
+        font-family: 'Inter', sans-serif;
+        font-size: 9px;
+        color: #BBBBBB;
+        padding: 0 0 18px 50px;
+      }
+    }
+    @page cover-page {
+      margin: 0;
+      @top-left { content: none; }
+      @bottom-right { content: none; }
+      @bottom-left { content: none; }
+    }
+    @page toc-page {
+      @bottom-right { content: none; }
+      @bottom-left { content: none; }
+    }
+
+    html, body {
+      background: var(--ill-cream);
+      font-size: 12px;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .cover {
+      page: cover-page;
+      width: 210mm;
+      height: 297mm;
+      page-break-after: always;
+      padding: 80px 50px 60px 50px;
+      position: relative;
+      overflow: hidden;
+    }
+    .cover-footer { left:50px; right:50px; bottom:30px; }
+
+    .section-header {
+      position: running(running-header);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 50px 8px 50px;
+      border-top: 4px solid var(--ill-orange);
+      border-bottom: 1px solid var(--ill-cream-dark);
+      background: var(--ill-cream);
+      margin: 0;
+    }
+
+    .content-wrap {
+      max-width: 100%;
+      padding: 0;
+      background: var(--ill-cream);
+    }
+    .content-wrap::before { display: none; }
+
+    .section {
+      break-before: page;
+      padding: 20px 50px 30px 50px;
+    }
+    .section:first-child { break-before: auto; }
+    /* Override for short sections that should flow after previous: */
+    /* .section:nth-child(3) { break-before: auto; } */
+
+    h2, h3, h4 { break-after: avoid; }
+    p, li { orphans: 3; widows: 3; }
+
+    .phase-spacer { display: none; }
+    .phase-banner {
+      break-after: avoid;
+      break-inside: avoid;
+      margin-top: 24px;
+      padding-top: 0;
+    }
+    .phase-banner:first-child { margin-top: 0; }
+
+    .step, .callout, .diagram-container, table, .checklist li {
+      break-inside: avoid;
+    }
+
+    /* <pre> is atomic — never splits within itself.
+       Long code that needs to span pages must use .code-multipart. */
+    pre {
+      break-inside: avoid;
+      font-size: 10px;
+      padding: 12px 16px;
+      orphans: 4;
+      widows: 4;
+    }
+
+    /* Multi-part code blocks: container may break between children,
+       each child <pre> stays atomic */
+    .code-multipart { break-inside: auto; margin: 14px 0; }
+    .code-multipart > pre {
+      break-inside: avoid;
+      margin: 0;
+      border-radius: 0;
+    }
+    .code-multipart > pre:first-child { border-radius: 8px 8px 0 0; }
+    .code-multipart > pre:last-child  { border-radius: 0 0 8px 8px; }
+    .code-multipart > pre:not(:last-child) {
+      border-bottom: 1px dashed #444;
+      padding-bottom: 10px;
+    }
+    .code-multipart > pre:not(:first-child) { padding-top: 10px; }
+
+    /* Elements following a phase-banner must not start a new page —
+       they belong with their banner */
+    .phase-banner + .step,
+    .phase-banner + pre,
+    .phase-banner + .code-multipart,
+    .phase-banner + p { break-before: avoid; }
+
+    .step { padding-top: 14px; margin-top: 0; }
+    .callout { margin-top: 16px; }
+    .checklist li { padding-top: 10px; }
+    h3 { padding-top: 18px; }
+    .phase-banner { padding-top: 10px; }
+    table { margin-top: 16px; }
+    .diagram-container { margin-top: 16px; }
+
+    .content-footer { padding: 16px 50px; }
+
+    /* TOC: uses the toc-page named page (header yes, no number, no footer);
+       always followed by a page break before the first section */
+    .toc { page: toc-page; break-after: page; }
+    .toc-list li a::after {
+      content: target-counter(attr(href), page);
+    }
+  }
+
+  /* ======= TABLE OF CONTENTS (screen + print) ======= */
+  .toc { padding: 36px 60px; background: var(--ill-cream); }
+  .toc h2 { margin-bottom: 20px; }
+  .toc-list { list-style: none; padding: 0; margin: 0; counter-reset: toc-num; }
+  .toc-list li {
+    counter-increment: toc-num;
+    margin: 0;
+    padding: 0;
+    border-bottom: 1px dashed var(--ill-cream-dark);
+  }
+  .toc-list li a {
+    display: flex;
+    align-items: baseline;
+    text-decoration: none;
+    color: var(--ill-charcoal);
+    padding: 11px 0;
+    font-size: 13.5px;
+    font-weight: 500;
+  }
+  .toc-list li a::before {
+    content: counter(toc-num, decimal-leading-zero);
+    color: var(--ill-orange);
+    font-weight: 700;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    margin-right: 14px;
+    flex-shrink: 0;
+  }
+  .toc-list li a .toc-title { flex: 1; }
+  .toc-list li a .toc-dots {
+    flex: 0 1 auto;
+    color: var(--ill-cream-dark);
+    margin: 0 8px;
+    overflow: hidden;
+    white-space: nowrap;
+    letter-spacing: 2px;
+  }
+  .toc-list li a::after {
+    /* On-screen fallback; replaced by target-counter in print */
+    content: "•";
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--ill-gray-600);
+    font-weight: 600;
+    flex-shrink: 0;
+    min-width: 28px;
+    text-align: right;
+  }

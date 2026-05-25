@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{ DOCUMENT_TITLE }}</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles/report.css">
+</head>
+<body>
+
+<!-- ==================== COVER ==================== -->
+<div class="cover">
+  <div class="geo-1"></div><div class="geo-2"></div><div class="geo-3"></div>
+  <div class="dots"></div><div class="dots-2"></div>
+  <div class="cover-logo">
+    <img src="assets/logo-white.png" alt="Illumio" class="cover-logo-img" style="height:40px;">
+  </div>
+  <h1>{{ DOCUMENT_TITLE }}</h1>
+  <p class="subtitle">{{ DOCUMENT_SUBTITLE }}</p>
+  <div class="cover-meta">
+    <div class="cover-meta-item">Version<strong>{{ VERSION }}</strong></div>
+    <div class="cover-meta-item">Date<strong>{{ DATE }}</strong></div>
+  </div>
+  <div class="cover-footer">
+    <span>&copy; {{ YEAR }} Illumio, Inc. All Rights Reserved.</span>
+    <span>CONFIDENTIAL</span>
+  </div>
+</div>
+
+<!-- ==================== CONTENT ==================== -->
+<div class="content-wrap">
+
+<!-- SECTION 1: Example Overview -->
+<div class="section">
+  <div class="section-header">
+    <img src="assets/logo-dark.png" alt="Illumio">
+    <span class="section-label">Overview</span>
+  </div>
+  <h2>Overview</h2>
+  <p>Replace this with your document overview. Describe the purpose, audience, and scope.</p>
+  <div class="callout callout-warning">
+    <div class="callout-label">Important Note</div>
+    Example warning callout. Use for constraints, timelines, or prerequisites.
+  </div>
+  <h3>How It Works</h3>
+  <p>Describe the high-level mechanism or architecture.</p>
+  <div class="diagram-container">
+    <div class="diagram-title">Architecture Diagram</div>
+    <svg viewBox="0 0 700 200" xmlns="http://www.w3.org/2000/svg" font-family="Inter, sans-serif">
+      <rect x="10" y="40" width="160" height="80" rx="8" fill="#F5F0EA" stroke="#2D2D2D" stroke-width="2"/>
+      <text x="90" y="75" text-anchor="middle" font-weight="700" font-size="13" fill="#2D2D2D">Component A</text>
+      <text x="90" y="95" text-anchor="middle" font-size="11" fill="#555">Description</text>
+      <rect x="220" y="66" width="100" height="24" rx="4" fill="#E8611A"/>
+      <text x="270" y="83" text-anchor="middle" font-size="10" fill="white" font-weight="600">1 Action</text>
+      <line x1="170" y1="80" x2="220" y2="78" stroke="#2D2D2D" stroke-width="1.5" stroke-dasharray="6,4"/>
+      <polygon points="218,74 228,78 218,82" fill="#2D2D2D"/>
+      <rect x="370" y="30" width="200" height="100" rx="8" fill="none" stroke="#E8611A" stroke-width="2" stroke-dasharray="6,3"/>
+      <text x="470" y="60" text-anchor="middle" font-weight="700" font-size="13" fill="#2D2D2D">Component B</text>
+      <text x="470" y="80" text-anchor="middle" font-size="11" fill="#555">Description</text>
+      <text x="470" y="100" text-anchor="middle" font-size="11" fill="#E8611A" font-weight="600">Status TBD</text>
+      <line x1="320" y1="78" x2="370" y2="78" stroke="#E8611A" stroke-width="1.5"/>
+      <polygon points="368,74 378,78 368,82" fill="#E8611A"/>
+    </svg>
+  </div>
+</div>
+
+<!-- SECTION 2: Example Prerequisites -->
+<div class="section">
+  <div class="section-header">
+    <img src="assets/logo-dark.png" alt="Illumio">
+    <span class="section-label">Prerequisites</span>
+  </div>
+  <h2>Prerequisites</h2>
+  <h3>Requirements</h3>
+  <p>List the requirements in a table format.</p>
+  <table>
+    <tr><th>Requirement</th><th>Detail</th><th>Notes</th></tr>
+    <tr><td>Requirement 1</td><td>Value</td><td>Notes here</td></tr>
+    <tr><td>Requirement 2</td><td>Value</td><td>Notes here</td></tr>
+  </table>
+  <div class="callout callout-info">
+    <div class="callout-label">Information</div>
+    Example info callout. Use for background information or FYI notes.
+  </div>
+  <ul class="checklist">
+    <li><strong>Checklist item 1</strong> &mdash; Description of what needs to be done.</li>
+    <li><strong>Checklist item 2</strong> &mdash; Description of another task.</li>
+  </ul>
+</div>
+
+<!-- SECTION 3: Example Procedure -->
+<div class="section">
+  <div class="section-header">
+    <img src="assets/logo-dark.png" alt="Illumio">
+    <span class="section-label">Procedure</span>
+  </div>
+  <h2>Procedure</h2>
+  <div class="phase-banner"><span class="phase-num">PHASE 1</span><span class="phase-title">First Phase Title</span></div>
+  <p>Introduction to the first phase.</p>
+  <pre><span class="label">Example Script</span>
+<span class="comment"># Example code block</span>
+<span class="cmdlet">Get-Service</span> <span class="param">-Name</span> <span class="string">"ServiceName"</span>
+</pre>
+  <div class="callout callout-success">
+    <div class="callout-label">Best Practice</div>
+    Example success callout. Use for tips and best practices.
+  </div>
+
+  <div class="phase-spacer"></div>
+  <div class="phase-banner"><span class="phase-num">PHASE 2</span><span class="phase-title">Second Phase Title</span></div>
+  <div class="step"><div class="step-number">1</div><div class="step-content"><h4>Step Title</h4><p>Step description goes here.</p></div></div>
+  <div class="step"><div class="step-number">2</div><div class="step-content"><h4>Another Step</h4><p>Another description with <code>inline code</code>.</p></div></div>
+
+  <div class="phase-spacer"></div>
+  <div class="phase-banner"><span class="phase-num">PHASE 3</span><span class="phase-title">Validation</span></div>
+  <h3>Verification Steps</h3>
+  <pre><span class="label">PowerShell</span>
+<span class="comment"># Verification command</span>
+<span class="cmdlet">Get-Service</span> <span class="param">-Name</span> <span class="string">"ServiceName"</span>
+</pre>
+  <h3>Troubleshooting</h3>
+  <table>
+    <tr><th>Symptom</th><th>Cause</th><th>Resolution</th></tr>
+    <tr><td>Issue 1</td><td>Root cause</td><td>Fix description</td></tr>
+    <tr><td>Issue 2</td><td>Root cause</td><td>Fix description</td></tr>
+  </table>
+</div>
+
+<!-- SECTION 4: Closing -->
+<div class="section">
+  <div class="section-header">
+    <img src="assets/logo-dark.png" alt="Illumio">
+    <span class="section-label">Checklist</span>
+  </div>
+  <h2>Pre-Action Checklist</h2>
+  <p>Complete these items before proceeding.</p>
+  <table>
+    <tr><th style="width:25px">#</th><th>Task</th><th>Owner</th><th style="width:45px">Done</th></tr>
+    <tr><td>1</td><td>Task description</td><td>Role</td><td style="text-align:center">&#9744;</td></tr>
+    <tr><td>2</td><td>Task description</td><td>Role</td><td style="text-align:center">&#9744;</td></tr>
+  </table>
+  <div class="callout callout-success" style="margin-top:20px;">
+    <div class="callout-label">Next Steps</div>
+    Description of what happens after this checklist is complete.
+  </div>
+  <div style="margin-top:28px;padding:20px;background:var(--ill-charcoal);border-radius:10px;text-align:center;position:relative;overflow:hidden;">
+    <div style="position:absolute;top:-10px;right:30px;width:50px;height:100px;background:var(--ill-orange);transform:skewX(-8deg);opacity:0.12;"></div>
+    <p style="color:rgba(255,255,255,0.6);font-size:12px;margin-bottom:4px;">Questions? Contact your Illumio pre-sales engineer</p>
+    <p style="color:#fff;font-weight:700;font-size:14px;">We're here to support every phase of your deployment.</p>
+  </div>
+</div>
+
+<div class="content-footer">
+  <span>&copy; {{ YEAR }} Illumio, Inc. All Rights Reserved.</span>
+</div>
+
+</div><!-- /content-wrap -->
+
+</body>
+</html>

@@ -1,0 +1,16 @@
+{
+  "name": "illumio-skills",
+  "description": "Illumio pre-sales engineering skills — branded reports, knowledge base, and tooling — distributed as Claude Code plugins with auto-update.",
+  "owner": {
+    "name": "Eric Roscher",
+    "email": "roschereric@gmail.com",
+    "url": "https://github.com/roschereric"
+  },
+  "plugins": [
+    {
+      "name": "illumio-branded-reports",
+      "source": "./plugins/illumio-branded-reports",
+      "description": "Generate professional branded PDF and HTML reports using Illumio's visual identity. Includes programmatic visual verification, PII guardrails, and bilingual EN/ES support."
+    }
+  ]
+}
