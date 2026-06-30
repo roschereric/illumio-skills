@@ -295,3 +295,14 @@ table { margin-top: 16px; }
 ### Font not rendering
 - WeasyPrint fetches Google Fonts at build time. Ensure network access or
   install fonts locally: `apt-get install fonts-inter`
+
+<!-- BEGIN illumio-skill-update:keep -->
+### Keep groups — prevent mid-unit page splits
+
+Wrap a logical unit (a phase banner + its steps + callouts) so it does not split across
+pages when it fits on one. Larger-than-page groups still break normally.
+
+```css
+.keep{ break-inside: avoid; }
+```
+<!-- END illumio-skill-update:keep -->

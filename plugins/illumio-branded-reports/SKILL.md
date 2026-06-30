@@ -330,3 +330,31 @@ Read these for implementation details:
 - **Do NOT set `@page { margin: 0 }` globally** — the running header needs `margin-top: 60px`.
 - **Do NOT use `leverages`, `utilize`, `in order to`** — these are AI speech patterns. Use plain language.
 - **Do NOT hardcode API versions or tenant-specific values** — use `<PLACEHOLDER>` format.
+
+<!-- BEGIN illumio-skill-update:addendum -->
+## Update addendum (managed — do not hand-edit between the markers)
+
+### Step 0 — MANDATORY resource pre-flight (run FIRST, every time)
+
+Before generating anything, run:
+
+    python scripts/preflight_check.py
+
+It verifies `template.html`, `styles/report.css`, `assets/logo-white.png`,
+`assets/logo-dark.png`, and `scripts/visual_verify.py` exist and are usable. If it exits
+non-zero you are on a STALE/PARTIAL skill copy — STOP, run
+`/illumio-branded-reports:skill-update`, then re-run the check. NEVER substitute a text
+wordmark, an invented mark, or system fonts to work around missing assets. The generator
+should import and call this check so a partial skill ABORTS the build instead of degrading.
+
+### Editable Word (.docx) — optional third output
+
+Generate Word from the SAME content (do not re-author) with pandoc so it never diverges
+from the PDF/HTML:
+
+    pandoc content.md -o Document.docx --toc --toc-depth=1 --resource-path <dir-with-PNGs>
+
+Render inline-SVG diagrams to PNG for Word and size with `![caption](d.png){width=6.4in}`.
+Pitfall: with pandoc `implicit_figures`, an image-only paragraph already gets a caption from
+its alt text — do NOT add a second caption line or it duplicates.
+<!-- END illumio-skill-update:addendum -->

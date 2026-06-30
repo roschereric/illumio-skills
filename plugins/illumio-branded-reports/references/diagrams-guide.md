@@ -331,3 +331,14 @@ The programmatic pre-flight (`scripts/visual_verify.py`, check 1) catches
 SVG text that overflows its parent `<svg>`. The rules above prevent the
 subtler case where text overflows a *sibling* rect inside the same SVG —
 the script doesn't catch this; visual review must.
+
+<!-- BEGIN illumio-skill-update:connectors -->
+### Connectors vs. labels — no crossing text
+
+- Never place text on top of connectors or boxes. Keep connectors straight and inside the
+  gaps between boxes.
+- For step/flow semantics, put a small numbered badge on each connector and describe the
+  steps in a numbered legend in a reserved band beneath the diagram — not inline on the lines.
+- Draw each line in the direction of flow; use a single `marker-end` with `orient="auto"`.
+- Always run `scripts/visual_verify.py` — it catches `<text>` overflowing its `<svg>`.
+<!-- END illumio-skill-update:connectors -->

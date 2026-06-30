@@ -1,6 +1,6 @@
 {
   "name": "illumio-branded-reports",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Generate professional branded PDF and HTML reports using Illumio's visual identity. WeasyPrint-based PDF generation with running headers, architecture diagrams, code blocks, and phase banners. Includes programmatic visual verification (SVG overflow, z-index, DOM overflow, image load), PII guardrails for customer/partner/leadership-facing deliverables, and bilingual EN/ES support.",
   "author": {
     "name": "Eric Roscher",

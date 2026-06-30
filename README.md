@@ -118,3 +118,30 @@ once we publish the ADR to this repo (currently lives in the workshop).
 
 Proprietary — for use by Eric Roscher and authorized Illumio LATAM
 colleagues. Contact `roschereric@gmail.com` for access requests.
+
+<!-- BEGIN illumio-skill-update:cross-env -->
+## Updating the skill across your Cowork environments
+
+This is a GitHub-backed marketplace plugin. **`main` in this repo is the single source of
+truth** — every Mac / Cowork environment syncs from it, so you do **not** need to know which
+machine originally created the skill.
+
+**Publish a change** (from any machine or Cowork notebook with network + a token):
+
+```bash
+GH_TOKEN="$(gh auth token)"  bash publish_skill_update.sh     # or GH_TOKEN=<PAT>
+```
+
+The script clones this repo, applies the managed updates (marker-guarded, safe to re-run),
+updates this README, and pushes to `main`.
+
+**Apply the latest in each environment** (do this once per Mac / per Cowork space):
+
+- It auto-updates on session start (`auto_update.sh` pulls from `main`), or force it:
+  - `/illumio-branded-reports:skill-update`  — pull the latest from GitHub
+  - `/illumio-branded-reports:skill-status`  — show local vs origin (should say *in sync*)
+
+**Verify the guardrail is active:** a fresh session runs `python scripts/preflight_check.py`
+and passes; if a partial/stale copy ever loads, the build stops with an error instead of
+producing off-brand output (wrong logo / system fonts).
+<!-- END illumio-skill-update:cross-env -->

@@ -401,3 +401,36 @@ Closing section with CTA and copyright.
   <span>&copy; 2026 Illumio, Inc. All Rights Reserved.</span>
 </div>
 ```
+
+<!-- BEGIN illumio-skill-update:docref-disclaimer -->
+## Inline documentation reference (`docref`)
+
+One per section, linking the exact official source pages (validate every URL first).
+
+```html
+<div class="docref"><strong>Official documentation:</strong>
+  <a href="URL">Title</a> &middot; <a href="URL">Title</a></div>
+```
+
+```css
+.docref{font-size:11.5px;color:#555;background:#FBF8F4;border-left:3px solid #E8611A;
+  padding:8px 13px;border-radius:0 6px 6px 0;margin:14px 0;break-inside:avoid;}
+.docref strong{color:#2D2D2D;}
+```
+
+## Disclaimer (non-official, customer-facing collateral)
+
+```html
+<div class="disclaimer"><div class="callout-label">Notice — unofficial document</div>
+  Support guide, not official Illumio documentation; does not replace it.</div>
+```
+
+```css
+.disclaimer{border:1.5px solid #E8611A;background:#FDF1E8;border-radius:8px;
+  padding:14px 18px;margin:6px 0 18px;line-height:1.6;break-inside:avoid;}
+```
+
+Cover fields to support: `disclaimer_short` (one line on the cover) and `tag`
+(e.g. "INTERNAL / CUSTOMER"). Keep the wording sober; one notice on the cover plus one
+after the TOC is enough.
+<!-- END illumio-skill-update:docref-disclaimer -->
