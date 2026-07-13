@@ -7,6 +7,11 @@ publishing changes, troubleshooting, and rollback.
 > **Audience.** Eric (across personal and work Macs) and any LATAM colleague
 > granted access to the marketplace repo. Read sections 1 and 2 once per
 > device; sections 3-5 as needed.
+>
+> **Updates not arriving? Marketplace sync failing?** See
+> **docs/TROUBLESHOOTING.md** — the four-layer failure guide (duplicate
+> skills, version pinning, broken hooks, Cowork server-side validation)
+> with the release checklist.
 
 ---
 

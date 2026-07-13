@@ -39,17 +39,8 @@ jobs:
           "
           done
 
-      - name: Validate hooks.json structure
-        run: |
-          for h in plugins/*/hooks/hooks.json; do
-            python3 -c "
-          import json
-          with open('$h') as f:
-              h = json.load(f)
-          assert 'hooks' in h, '$h missing hooks key'
-          print('$h OK')
-          "
-          done
+      - name: Validate manifests (hooks fields + version consistency)
+        run: python3 scripts/validate_manifests.py
 
       - name: Validate SKILL.md frontmatter
         run: |
