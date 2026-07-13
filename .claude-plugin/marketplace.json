@@ -1,6 +1,6 @@
 {
   "name": "illumio-skills",
-  "description": "Illumio pre-sales engineering skills — branded reports, knowledge base, and tooling — distributed as Claude Code plugins with auto-update.",
+  "description": "Illumio pre-sales engineering skills \u2014 branded reports, knowledge base, and tooling \u2014 distributed as Claude Code plugins with auto-update.",
   "owner": {
     "name": "Eric Roscher",
     "email": "roschereric@gmail.com",
@@ -10,7 +10,8 @@
     {
       "name": "illumio-branded-reports",
       "source": "./plugins/illumio-branded-reports",
-      "description": "Generate professional branded PDF and HTML reports using Illumio's visual identity. Includes programmatic visual verification, PII guardrails, and bilingual EN/ES support."
+      "description": "Generate professional branded PDF and HTML reports using Illumio's official Orange & Slate identity (Brand Hub verified). Fail-closed pipeline: scaffolder, brand-integrity lint, visual verification, standalone HTML export, localized disclaimer, EN/ES/PT.",
+      "version": "2.1.0"
     }
   ]
 }
