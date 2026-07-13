@@ -1,214 +1,155 @@
-# Illumio Branding Tokens
+# Illumio Branding Tokens — OFFICIAL (Illumio Brand Hub / Frontify)
+
+Verified against the Illumio Brand Hub (illumio.frontify.com, Design System:
+Color / Typography / Logo / Pattern & Shape / Imagery; guidelines last
+modified May 2026). Values below marked **[official]** are verbatim from the
+Brand Hub; values marked *[derived]* are pragmatic derivations for print
+legibility and are documented as such.
 
 ## Color Palette
 
-### Primary Colors
-| Token                | Hex       | RGB             | Usage                                          |
-|----------------------|-----------|-----------------|------------------------------------------------|
-| `--ill-orange`       | `#E8611A` | `232, 97, 26`   | Primary accent: borders, badges, buttons       |
-| `--ill-orange-light` | `#F28C50` | `242, 140, 80`  | Secondary accent: geometric shapes, highlights |
-| `--ill-orange-dark`  | `#C4500F` | `196, 80, 15`   | Callout labels, dark accent contexts           |
-| `--ill-cream`        | `#F5F0EA` | `245, 240, 234` | Page background                                |
-| `--ill-cream-dark`   | `#EDE6DC` | `237, 230, 220` | Borders, code inline background, dividers      |
-| `--ill-charcoal`     | `#2D2D2D` | `45, 45, 45`    | Body text, table headers, phase banners        |
+Rule from the Brand Hub: *"Designs should always lead with Illumio Orange."*
+Secondary colors support, never overshadow. Tertiary accents are used
+sparingly and never alone.
 
-### Neutral Grays
-| Token              | Hex       | Usage                    |
-|--------------------|-----------|--------------------------|
-| `--ill-gray-700`   | `#3D3D3D` | Paragraph text           |
-| `--ill-gray-600`   | `#555555` | Secondary text           |
-| `--ill-gray-400`   | `#999999` | Section labels, metadata |
-| `--ill-gray-300`   | `#BBBBBB` | Footer text, subtle info |
+### Primary Colors [official]
+| Name | Hex | RGB | CMYK | PMS |
+|---|---|---|---|---|
+| **Illumio Orange** | `#FF5500` | 255, 85, 0 | 0, 77, 100, 0 | Orange 21C |
+| **White** | `#FFFFFF` | 255, 255, 255 | 0, 0, 0, 0 | — |
+| **Server Slate 100** | `#313638` | 49, 54, 56 | 70, 57, 63, 65 | 447C |
 
-### Semantic Colors
-| Token              | Hex       | Usage                               |
-|--------------------|-----------|-------------------------------------|
-| `--ill-success`    | `#2E8B57` | Success callouts, positive states   |
-| `--ill-info-blue`  | `#3B7DD8` | Info callouts, informational notes  |
-| `--ill-danger`     | `#D63031` | Critical/error callouts, warnings   |
-| `--ill-code-bg`    | `#1E1E1E` | Code block background (VS Code dark)|
+Server Slate tint scale [official]: 90 `#464A4C` · 80 `#64686A` · 70 `#6F7274`
+· 60 `#838688` · 50 `#989A9B` · 40 `#ADAFAF` · 30 `#C1C3C3` · 20 `#D6D7D7`
+· 10 `#EAEBEB` · 5 `#F5F5F5`. Server Slate is the primary TEXT color.
 
-### Cover-Specific Colors
-| Token                | Hex       | Usage                           |
-|----------------------|-----------|---------------------------------|
-| `--ill-cover-dark`   | `#3B4856` | Cover gradient end              |
-| `--ill-cover-darker` | `#2B3640` | Cover gradient start            |
-| Cover gradient end   | `#4A5A6A` | Cover gradient light end        |
+### Secondary Colors [official]
+| Name | Scale (hex) | Use |
+|---|---|---|
+| **System Cyan** | 120 `#1A2C32` · 110 `#24393F` · 100 `#2D454C` · 90 `#325158` · 80 `#356069` | Cool dark backgrounds that ground designs (our code blocks use 120) |
+| **Zero Trust Tan** | 130 `#D1BEA0` · 120 `#E3D8C5` · 110 `#F2EDE2` · 100 `#F7F4EE` | Warm subtle backgrounds (our panel fills use 100) |
+| **Cloud Cerulean** | 120 `#94CEE5` · 110 `#C2E2F0` · 100 `#E5F2F9` · 90 `#F3F8FC` | Calm light backgrounds (our info callouts use 100) |
 
-## Typography
+### Tertiary Colors & Accents [official — use sparingly, never alone]
+| Name | Scale (hex) | Use |
+|---|---|---|
+| **Circuit Gold** | 110 `#F97607` · 100 `#FFA22F` · 90 `#FFB74A` · 80 `#FFD388` · 70 `#FFEAC6` · 60 `#FFF8EB` | Chart/diagram highlights; 60 is our warning-callout fill |
+| **Protocol Purple** | 130 `#3C1632` … 80 `#C66FB6` (100 `#8B407A`) | Product illustrations/abstractions ONLY |
+| **Cyber Chartreuse** | 100 `#BBFF22` | Fine lines / thin shapes ONLY, smallest possible amounts |
 
-### Font Stack
-- **Body**: `'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif`
-- **Code**: `'JetBrains Mono', 'Fira Code', 'Consolas', monospace`
+### Diagram Colors [official — charts, diagrams, product abstractions ONLY]
+| Name | Scale (hex) | Use |
+|---|---|---|
+| **Safeguard Green** | 130 `#08261B` · 120 `#11432F` · 100 `#166644` · 80 `#299B65` | Benefits / positive aspects (our success callouts use 100) |
+| **Risk Red** | 130 `#4C0514` · 120 `#88132E` · 100 `#BE122F` · 80 `#F43F51` | Risks / negative aspects (our critical callouts use 100) |
 
-### Font Weights Used
-| Weight | Usage                                     |
-|--------|-------------------------------------------|
-| 300    | Light — cover subtitle                    |
-| 400    | Regular — body text                       |
-| 500    | Medium — metadata                         |
-| 600    | Semibold — phase titles, table headers    |
-| 700    | Bold — h3, step titles, callout labels    |
-| 800    | Extrabold — h1, h2, step numbers          |
-| 900    | Black — available for emphasis            |
+### Skill CSS tokens → official mapping
+| Token | Value | Source |
+|---|---|---|
+| `--ill-orange` | `#FF5500` | Illumio Orange [official] |
+| `--ill-slate` | `#313638` | Server Slate 100 [official] |
+| `--ill-paper` | `#FFFFFF` | White [official] |
+| `--ill-mist` | `#F7F4EE` | Zero Trust Tan 100 [official] |
+| `--ill-line` | `#EAEBEB` | Server Slate 10 [official] |
+| `--ill-gray-700/600/400/300` | `#464A4C` / `#6F7274` / `#989A9B` / `#C1C3C3` | Server Slate 90/70/50/30 [official] |
+| `--ill-code-bg`, `--ill-syscyan-deep` | `#1A2C32` | System Cyan 120 [official] |
+| `--ill-syscyan` | `#2D454C` | System Cyan 100 [official] |
+| `--ill-success` | `#166644` | Safeguard Green 100 [official] |
+| `--ill-danger` | `#BE122F` | Risk Red 100 [official] |
+| `--ill-info-blue` | `#356069` | System Cyan 80 [official] |
+| `--ill-gold` | `#FFA22F` | Circuit Gold 100 [official] |
+| `--ill-chartreuse` | `#BBFF22` | Cyber Chartreuse [official] |
+| `--ill-orange-deep` | `#C43C00` | *[derived]* darker orange for small text/links on white (AA contrast); official orange stays the accent |
+| `--ill-orange-light` | `#FF7A33` | *[derived]* tint for underlines/soft accents |
 
-### Type Scale
-| Element          | Size   | Weight | Color              |
-|------------------|--------|--------|--------------------|
-| Cover h1         | 38px   | 800    | White              |
-| Cover subtitle   | 15px   | 400    | White 70% opacity  |
-| h2 (section)     | 24px   | 800    | Charcoal           |
-| h3 (subsection)  | 16px   | 700    | Charcoal           |
-| h4 (step title)  | 14px   | 700    | Charcoal           |
-| Body paragraph   | 13.5px | 400    | Gray-700           |
-| Code block       | 11.5px | 400    | #D4D4D4 on dark    |
-| Section label    | 11px   | 400    | Gray-400 uppercase |
-| Table header     | 11px   | 600    | White uppercase    |
-| Callout label    | 11.5px | 700    | Semantic color     |
+## Typography [official]
 
-### Line Heights
-| Context    | Value |
-|------------|-------|
-| Body       | 1.7   |
-| Code       | 1.6   |
-| Headings   | 1.2   |
-| Callouts   | 1.65  |
-| Cover sub  | 1.6   |
+**Primary typeface: FK Grotesk** (Florian Karsten Typefaces). LICENSED —
+the Brand Hub states the font file is *not authorized for distribution*;
+production use requires Brand-team approval. Therefore this skill does NOT
+bundle or embed it. Do not add FK Grotesk files to `assets/fonts/`; a PDF
+embeds whatever font renders it, and embedding an unlicensed copy in
+customer-facing files is a violation.
 
-## Spacing System
+**Secondary typeface: Montserrat** — the Brand Hub's designated replacement
+when FK Grotesk is unavailable, explicitly sanctioned for *"the Corporate
+PowerPoint Template, or other self-publishing document templates where the
+font can be embedded into the file"* (SIL OFL license). That is exactly this
+skill's use case, so **Montserrat (bundled in `assets/fonts/`) is the default
+and correct typeface for these reports.** Official weights in use:
+ExtraLight 200, Light 300, Regular 400, Medium 500, SemiBold 600, Bold 700.
 
-| Context             | Value  |
-|---------------------|--------|
-| Section padding     | 36px 60px (screen), 20px 50px (print) |
-| Callout padding     | 14px 18px                              |
-| Code block padding  | 16px 20px                              |
-| Step gap            | 14px                                   |
-| Phase banner margin | 28px top, 14px bottom                  |
-| Cover padding       | 80px                                   |
-| Border radius       | 8px (most), 10px (diagram), 3px (code inline) |
+**Last-resort fallback: Arial** [official]. The CSS stack is
+`'Montserrat', Arial, …`. Code uses JetBrains Mono (bundled; not a Brand Hub
+face — *[derived]* choice for technical monospace, swap freely).
 
-## Geometric Shapes (Cover)
+### Type scale (print) — skill spec
+| Element | Size | Weight | Color |
+|---|---|---|---|
+| Cover h1 | 31pt | **300 Light** | White (slate on paper variant) |
+| Cover subtitle | 13.5pt | **700 Bold** | White |
+| Cover byline / date | 10.5pt | 500 / 400 | White 95% / 78% |
+| h2 (section) | 25px | 700 | Slate + 10px orange square tick |
+| h3 | 16px | 700 | Slate |
+| Body | 13.5px | 400 | Server Slate 90 |
+| Code | 10px | 400 | `#D9DCDD` on System Cyan 120 |
+| Section label | 10.5px | 600 | Server Slate 50, tracking 1.6px |
+| Ref-list entries | 10.5px | 400 | Server Slate 70; URLs orange-deep |
 
-The cover uses three skewed parallelogram shapes in the upper-right area:
+## Logo [official rules — Brand Hub, Design System > Logo]
 
-```css
-.geo-1 { top:-60px; right:80px;  width:130px; height:360px; background:var(--ill-orange);       skewX(-8deg); opacity:0.92; }
-.geo-2 { top:20px;  right:230px; width:90px;  height:280px; background:var(--ill-orange-light);  skewX(-8deg); opacity:0.65; }
-.geo-3 { bottom:-30px; right:40px; width:70px; height:220px; background:var(--ill-orange-dark);  skewX(-8deg); opacity:0.55; }
-```
+The lock-up = glyph + logotype. The glyph represents the **PCE and VEN
+joining within a contained boundary**. Four approved color variants:
 
-Plus two dot-matrix patterns:
-```css
-.dots   { top:40px;    right:340px; 80x80px;  radial-gradient white 30% opacity }
-.dots-2 { bottom:80px; right:180px; 60x60px;  radial-gradient orange 50% opacity }
-```
+| Variant | When |
+|---|---|
+| **White** | On any solid color or photo darker than 30% gray (our orange & slate covers) |
+| **Orange & slate gray** | On anything lighter than 20% gray (our white pages/headers) |
+| **Orange & white** | Alternative on dark backgrounds when keeping some orange |
+| **Black** | Only when black is required (1-color printing etc.) |
 
-## Logo Usage
+Hard rules [official]:
+- Design ratio is **4:1** (width = 4 × height) — never skew. The bundled
+  PNGs are 800×200, exactly 4:1; height-only CSS sizing preserves it.
+- **Clear space:** at least one glyph's width around the lock-up (half a
+  glyph when pairing with a third-party logo, or more if the partner requires).
+- The glyph may be used alone (avatar/compact); the **logotype never appears
+  alone**, and the two are never rearranged or altered independently.
+- Never: blur/pixelate, layer over busy imagery, change the logotype, add
+  effects, use inline with text, squish/stretch, **recolor**, outline,
+  underline, or rotate.
 
-- **White logo** on dark backgrounds (cover, footer CTA)
-- **Dark logo** on light backgrounds (section headers, content area)
-- Height: 40px on cover, 22px in section headers
-- Both logos are embedded as base64 PNG in the template — no external files needed
+### Skill enforcement (unchanged)
+- Use ONLY `assets/logo-white.png` (dark/orange backgrounds) and
+  `assets/logo-dark.png` (= official "orange & slate gray", light backgrounds).
+- `check_brand.py` hash-verifies both. Missing/new variant needed (e.g. the
+  official SVG or orange-&-white version)? **STOP and ASK THE USER** —
+  download from the Brand Hub ("Download logos") — never redraw or recolor.
+- No CSS `filter` recoloring (WeasyPrint renders native fills; browsers lie).
+- Verify in the rendered PDF, never only the browser preview.
+
+## Pattern & Shape [official vocabulary]
+
+Everything derives from the **isometric grid**: staggered rhombus patterns,
+parallelograms (with rhombus shadows), hexagons, isometric **containers**
+(prism building blocks used to compose "cities, networks, abstract
+landscapes" that represent *growth, connection, protection*), and thin
+**accent lines**. Sanctioned uses in this skill: the default cover strip
+(`assets/cover-art.svg`, generated from these primitives on System Cyan 120),
+the 10px orange square before h2 headings, and small square/diamond clusters
+in the closing CTA box. Decoration never overlaps text — `visual_verify.py`
+polices `[data-decoration]` elements.
+
+## Imagery [official]
+
+Hero "storytelling imagery" (the containment world-building renders seen on
+corporate decks) comes from an **approved library** — appropriate for
+"high engagement documents, guides, or briefs". When the user supplies one,
+apply it with `new_report.py --cover-art <file>`; brand elements may be
+overlaid. Do not generate imitation storytelling imagery.
 
 ---
 
-## Logo Handling — Two Variants of the Official Asset
-
-### Fundamental principle — NEVER recreate or substitute brand elements
-
-> **Never substitute, recreate, or approximate brand image elements.** This
-> includes logos, wordmarks, isotypes, and any representation of the brand.
-> The ONLY permitted modification of an official brand asset is changing
-> fill colors while keeping paths, viewBox, proportions, and composition
-> identical.
-
-Explicitly forbidden anti-patterns:
-
-- ❌ Replacing the wordmark "illumio" with text in another font (Inter, Helvetica, etc.)
-- ❌ Drawing the isotype with rectangles, circles, or inline SVG shapes that approximate the mark
-- ❌ "Inspired" simplified versions of the logo
-- ❌ Variations not approved by brand (removing the isotype, changing element spacing, etc.)
-
-Correct patterns:
-
-- ✅ Use the official SVG file as-is
-- ✅ When a different palette is needed (e.g., white-on-dark), generate a fill-substituted variant of the SAME file — never modify paths or structure
-- ✅ If the official asset is not accessible (sandbox without network, blocked CDN), STOP and ask the user for the file. Do not improvise.
-
-### Why CSS `filter` doesn't work for SVG logos in WeasyPrint
-
-The earlier pattern of `filter: brightness(0) invert(1)` on `<img src="logo.svg">` works in browsers but **fails silently in WeasyPrint** — WeasyPrint v60+ implements `filter` for HTML elements but does NOT propagate it into the vectorial content of an embedded SVG. The PDF renders the SVG's native fills.
-
-This produces a particularly confusing failure: the browser preview looks correct, the developer assumes the build is fine, and only the PDF (which the customer actually receives) shows the broken result. **Always verify in the PDF, not in the browser.**
-
-### Solution — generate fill-substituted variants
-
-```bash
-# 1. Inspect the official SVG to find the fills that need substituting
-grep -o 'fill="[^"]*"' assets/logo-dark.svg | sort -u
-# Typical output:
-#   fill="none"            <- leave alone (transparencies)
-#   fill="#313638"         <- charcoal of the wordmark
-#   fill="#FF5500"         <- orange of the isotype (if applicable)
-
-# 2. Generate the white variant by substituting opaque fills
-sed -e 's/fill="#313638"/fill="white"/g' \
-    -e 's/fill="#FF5500"/fill="white"/g' \
-    assets/logo-dark.svg > assets/logo-white.svg
-
-# 3. Verify — only "none" and "white" should remain
-grep -o 'fill="[^"]*"' assets/logo-white.svg | sort -u
-```
-
-> **Note on the current skill assets.** This skill ships PNG variants
-> (`assets/logo-dark.png` and `assets/logo-white.png`). PNG works
-> universally in WeasyPrint and is the safe default. If you need crisper
-> rendering at large sizes, you can swap to SVG variants generated by the
-> `sed` pattern above, but keep PNG as the canonical fallback for
-> production documents until you've verified SVG renders cleanly in your
-> target environment.
-
-### Variant A — Cover (dark background)
-
-```html
-<div class="cover-logo">
-  <img src="assets/logo-white.png" alt="Illumio" style="height:36px;">
-  <!-- or, if using SVG variants: src="assets/logo-white.svg" -->
-</div>
-```
-
-```css
-.cover-logo { display: flex; align-items: center; }
-.cover-logo img { height: 36px; }
-```
-
-### Variant B — Section running headers (cream background)
-
-```html
-<div class="section-header">
-  <div class="logo-mini">
-    <img src="assets/logo-dark.png" alt="Illumio" style="height:22px;">
-  </div>
-  <span class="section-label">SECTION NAME</span>
-</div>
-```
-
-```css
-.section-header .logo-mini img { height: 22px; }
-```
-
-### Documented anti-pattern — the "rectangles + Inter text" rollback
-
-A previous iteration of this skill, when it couldn't load the official asset, attempted a rollback to an inline SVG made of two colored rectangles plus a `<span>illumio</span>` in Inter font. That passed the "contrast on dark background" check but violated the no-invention principle: the Illumio wordmark has a specific type design that Inter does not replicate, and the isotype is a particular composition, not two rectangles.
-
-If the official asset truly cannot be loaded, **the correct response is to pause and ask the user for the file**. A delayed render is infinitely better than shipping a PDF with an apocryphal logo.
-
-### Logo usage checklist
-
-- [ ] Both files exist in `assets/`: `logo-dark.png` (or `.svg`) and `logo-white.png` (or `.svg`)
-- [ ] Both variants share identical structure (paths, viewBox, dimensions) — only fills differ
-- [ ] Cover uses the white variant directly, no `filter`
-- [ ] Section headers use the dark variant directly, no `filter`
-- [ ] No inline `<svg>` in the document approximates the logo
-- [ ] No `<span>` simulates the wordmark in an alternate font
-- [ ] Render to PDF and verify visually — browser preview is not sufficient
+Source: Illumio Brand Hub — https://illumio.frontify.com/hub/218823
+(Design System document 428325: Logo, Color, Typography, Imagery,
+Pattern & Shape). Re-verify against the hub when guidelines change.

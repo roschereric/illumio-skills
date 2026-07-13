@@ -27,7 +27,7 @@ The default `@page` defines running header (top), page number (bottom-right), an
 
   @bottom-right {
     content: counter(page);
-    font-family: 'Inter', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     font-size: 10px;
     font-weight: 500;
     color: #999999;
@@ -35,8 +35,8 @@ The default `@page` defines running header (top), page number (bottom-right), an
   }
 
   @bottom-left {
-    content: "<DOCUMENT TITLE>  ·  <SUBTITLE>";  /* Replace with actual title at build time */
-    font-family: 'Inter', sans-serif;
+    content: "";  /* real title injected per-document by new_report.py into <style id="doc-overrides"> */
+    font-family: 'Montserrat', sans-serif;
     font-size: 9px;
     color: #BBBBBB;
     padding: 0 0 18px 50px;
@@ -59,6 +59,10 @@ The default `@page` defines running header (top), page number (bottom-right), an
 }
 ```
 
+**Per-document tweaks live in `<style id="doc-overrides">` in the HTML** —
+short-section flow overrides and the @bottom-left footer text. Never edit
+`styles/report.css` per document (it is hash-checked by `check_brand.py`).
+
 The page counter starts at 1 with the cover. So in practice:
 - Cover = page 1 (counter exists, just not rendered)
 - TOC = page 2 (counter exists, just not rendered)
@@ -69,7 +73,7 @@ If you prefer numbering to start at `1` on the first content section, add `count
 ### Why 60px Top Margin and 50px Bottom?
 
 The running header contains:
-- 4px orange top border
+- 3px orange top border
 - 12px padding-top
 - 22px logo height (flex-aligned with section label text)
 - 8px padding-bottom
@@ -108,9 +112,9 @@ This means: if "Deployment Procedure" spans 3 pages, all 3 pages show "DEPLOYMEN
   justify-content: space-between;
   align-items: center;
   padding: 12px 50px 8px 50px;
-  border-top: 4px solid var(--ill-orange);
-  border-bottom: 1px solid var(--ill-cream-dark);
-  background: var(--ill-cream);
+  border-top: 3px solid var(--ill-orange);
+  border-bottom: 1px solid var(--ill-line);
+  background: var(--ill-paper);
   margin: 0;
 }
 ```
@@ -245,7 +249,10 @@ http_access deny !Safe_ports
 ```
 
 The cover uses `page: cover-page` which maps to `@page cover-page { margin: 0; }`.
-This gives full-bleed rendering without the running header.
+This gives full-bleed rendering without the running header. Layout inside the
+cover is handled by `.cover-content` (flex column, z-index 2) and the
+`.cover-art` strip (right, 56mm, z-index 1) — see `styles/report.css`; the
+scaffolded markup already has the correct structure.
 
 ## Content Wrapper
 
@@ -253,7 +260,7 @@ This gives full-bleed rendering without the running header.
 .content-wrap {
   max-width: 100%;  /* Full width in print (860px max in screen) */
   padding: 0;
-  background: var(--ill-cream);
+  background: var(--ill-mist);
 }
 .content-wrap::before { display: none; }  /* Hide the orange top bar (causes blank page) */
 ```
@@ -290,19 +297,11 @@ table { margin-top: 16px; }
 
 ### Elements splitting awkwardly
 - Add `break-inside: avoid` to the element
-- For code blocks, let them split — the alternative (huge blank gaps) is worse
+- For long code blocks, use the `.code-multipart` pattern (see Code Block Atomicity) — never let a single `<pre>` split
 
 ### Font not rendering
-- WeasyPrint fetches Google Fonts at build time. Ensure network access or
-  install fonts locally: `apt-get install fonts-inter`
-
-<!-- BEGIN illumio-skill-update:keep -->
-### Keep groups — prevent mid-unit page splits
-
-Wrap a logical unit (a phase banner + its steps + callouts) so it does not split across
-pages when it fits on one. Larger-than-page groups still break normally.
-
-```css
-.keep{ break-inside: avoid; }
-```
-<!-- END illumio-skill-update:keep -->
+- Fonts are BUNDLED in `assets/fonts/` and declared via `@font-face` in
+  `styles/report.css` — no network is used. If type falls back, the `assets/`
+  folder wasn't copied next to the HTML (re-run `new_report.py`) or the
+  `../assets/fonts/` relative path was broken by moving files. `check_brand.py`
+  catches both.

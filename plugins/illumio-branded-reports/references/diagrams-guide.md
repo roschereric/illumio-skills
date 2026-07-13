@@ -35,7 +35,7 @@ exported as SVG. The SVGs embed cleanly in the HTML report.
 
 1. **Create the diagram** in Excalidraw (web app or desktop)
    - Use the brand color palette below for fills and strokes
-   - Use Inter font (select "Normal" in Excalidraw — it uses a hand-drawn font by default)
+   - Use Montserrat/Normal font (select "Normal" in Excalidraw — it uses a hand-drawn font by default)
    - For a cleaner look: set stroke style to "Architect" or "Artist" mode
 
 2. **Export as SVG**
@@ -71,16 +71,16 @@ When drawing in Excalidraw, use these hex values:
 
 | Excalidraw Element | Color to Use | Hex       | Illumio Token      |
 |--------------------|--------------|-----------|--------------------|
-| Box fill           | Light cream  | `#F5F0EA` | `--ill-cream`      |
-| Box stroke         | Dark gray    | `#2D2D2D` | `--ill-charcoal`   |
-| Accent box stroke  | Orange       | `#E8611A` | `--ill-orange`     |
-| Arrow lines        | Dark gray    | `#2D2D2D` | `--ill-charcoal`   |
-| Label backgrounds  | Orange       | `#E8611A` | `--ill-orange`     |
+| Box fill           | Light cream  | `#F7F4EE` | `--ill-cream`      |
+| Box stroke         | Dark gray    | `#313638` | `--ill-charcoal`   |
+| Accent box stroke  | Orange       | `#FF5500` | `--ill-orange`     |
+| Arrow lines        | Dark gray    | `#313638` | `--ill-charcoal`   |
+| Label backgrounds  | Orange       | `#FF5500` | `--ill-orange`     |
 | Label text on orange | White      | `#FFFFFF` | —                  |
-| Title text         | Dark gray    | `#2D2D2D` | `--ill-charcoal`   |
-| Subtitle text      | Medium gray  | `#555555` | `--ill-gray-600`   |
-| Status/accent text | Orange       | `#E8611A` | `--ill-orange`     |
-| Dashed borders     | Orange       | `#E8611A` | (for TBD/pending)  |
+| Title text         | Dark gray    | `#313638` | `--ill-charcoal`   |
+| Subtitle text      | Medium gray  | `#6F7274` | `--ill-gray-600`   |
+| Status/accent text | Orange       | `#FF5500` | `--ill-orange`     |
+| Dashed borders     | Orange       | `#FF5500` | (for TBD/pending)  |
 
 ### Excalidraw Tips for Print
 
@@ -113,22 +113,22 @@ gives perfect brand alignment. See `component-catalog.md` for the full pattern.
 ### Quick Reference
 
 ```svg
-<svg viewBox="0 0 700 200" xmlns="http://www.w3.org/2000/svg" font-family="Inter, sans-serif">
+<svg viewBox="0 0 700 200" xmlns="http://www.w3.org/2000/svg" font-family="Montserrat, sans-serif">
   <!-- Solid box -->
   <rect x="10" y="40" width="160" height="80" rx="8"
-        fill="#F5F0EA" stroke="#2D2D2D" stroke-width="2"/>
+        fill="#F7F4EE" stroke="#313638" stroke-width="2"/>
   <text x="90" y="75" text-anchor="middle"
-        font-weight="700" font-size="13" fill="#2D2D2D">Title</text>
+        font-weight="700" font-size="13" fill="#313638">Title</text>
 
   <!-- Dashed accent box (for pending/external components) -->
   <rect x="400" y="30" width="200" height="100" rx="8"
-        fill="none" stroke="#E8611A" stroke-width="2" stroke-dasharray="6,3"/>
+        fill="none" stroke="#FF5500" stroke-width="2" stroke-dasharray="6,3"/>
 
   <!-- Arrow with label -->
   <line x1="170" y1="80" x2="390" y2="80"
-        stroke="#2D2D2D" stroke-width="1.5" stroke-dasharray="6,4"/>
-  <polygon points="388,76 398,80 388,84" fill="#2D2D2D"/>
-  <rect x="230" y="68" width="100" height="24" rx="4" fill="#E8611A"/>
+        stroke="#313638" stroke-width="1.5" stroke-dasharray="6,4"/>
+  <polygon points="388,76 398,80 388,84" fill="#313638"/>
+  <rect x="230" y="68" width="100" height="24" rx="4" fill="#FF5500"/>
   <text x="280" y="85" text-anchor="middle"
         font-size="10" fill="white" font-weight="600">1 Action</text>
 </svg>
@@ -209,14 +209,14 @@ without explanatory text between them.
 Quick-copy hex values for use in any diagramming tool:
 
 ```
-Primary:    #E8611A  (orange — accents, labels, active connections)
-Background: #F5F0EA  (cream — box fills)
-Dark:       #2D2D2D  (charcoal — borders, text, arrows)
-Light text: #555555  (gray — subtitles, descriptions)
-Accent:     #F28C50  (light orange — secondary elements)
-Success:    #2E8B57  (green — completed/active states)
-Info:       #3B7DD8  (blue — informational elements)
-Danger:     #D63031  (red — errors/blockers)
+Primary:    #FF5500  (orange — accents, labels, active connections)
+Background: #F7F4EE  (cream — box fills)
+Dark:       #313638  (charcoal — borders, text, arrows)
+Light text: #6F7274  (gray — subtitles, descriptions)
+Accent:     #FF7A33  (light orange — secondary elements)
+Success:    #166644  (green — completed/active states)
+Info:       #356069  (blue — informational elements)
+Danger:     #BE122F  (red — errors/blockers)
 White:      #FFFFFF  (text on dark/orange backgrounds)
 ```
 
@@ -236,8 +236,8 @@ before the polygon's base.**
 
 ```svg
 <!-- Destination rect starts at x=200 -->
-<line x1="140" y1="120" x2="240" y2="120" stroke="#2D2D2D"/>
-<polygon points="238,116 248,120 238,124" fill="#2D2D2D"/>
+<line x1="140" y1="120" x2="240" y2="120" stroke="#313638"/>
+<polygon points="238,116 248,120 238,124" fill="#313638"/>
 <!-- polygon tip is at x=248: 48px INSIDE the destination rect -->
 ```
 
@@ -245,8 +245,8 @@ before the polygon's base.**
 
 ```svg
 <!-- Destination rect starts at x=200 -->
-<line x1="140" y1="120" x2="190" y2="120" stroke="#2D2D2D"/>
-<polygon points="190,116 200,120 190,124" fill="#2D2D2D"/>
+<line x1="140" y1="120" x2="190" y2="120" stroke="#313638"/>
+<polygon points="190,116 200,120 190,124" fill="#313638"/>
 <!-- polygon base at x=190 (line ends there); tip at x=200 (the rect edge) -->
 ```
 
@@ -303,7 +303,7 @@ because only 40px of space actually existed.
 
    **(c) Split with `<tspan>`.** Multi-line label centered:
    ```svg
-   <text x="530" y="130" text-anchor="middle" font-size="9" fill="#555">
+   <text x="530" y="130" text-anchor="middle" font-size="9" fill="#6F7274">
      <tspan x="530" dy="0">TLS</tspan>
      <tspan x="530" dy="11">pasante</tspan>
    </text>
@@ -332,8 +332,7 @@ SVG text that overflows its parent `<svg>`. The rules above prevent the
 subtler case where text overflows a *sibling* rect inside the same SVG —
 the script doesn't catch this; visual review must.
 
-<!-- BEGIN illumio-skill-update:connectors -->
-### Connectors vs. labels — no crossing text
+## Connectors and legends (hard rules)
 
 - Never place text on top of connectors or boxes. Keep connectors straight and inside the
   gaps between boxes.
@@ -341,4 +340,3 @@ the script doesn't catch this; visual review must.
   steps in a numbered legend in a reserved band beneath the diagram — not inline on the lines.
 - Draw each line in the direction of flow; use a single `marker-end` with `orient="auto"`.
 - Always run `scripts/visual_verify.py` — it catches `<text>` overflowing its `<svg>`.
-<!-- END illumio-skill-update:connectors -->

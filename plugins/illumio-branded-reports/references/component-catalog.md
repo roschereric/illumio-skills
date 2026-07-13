@@ -24,7 +24,7 @@ Every content section follows this pattern. The `.section-header` feeds the runn
 ```html
 <div class="section">
   <div class="section-header">
-    <img src="DATA_URI_DARK_LOGO" alt="Illumio">
+    <img src="assets/logo-dark.png" alt="Illumio">
     <span class="section-label">Section Name Here</span>
   </div>
   <h2>Section Title</h2>
@@ -98,6 +98,15 @@ Dark-themed code blocks with syntax highlighting via CSS classes.
 | `.cmdlet`   | `#DCDCAA` | Commands/functions (yellow)    |
 | `.variable` | `#C586C0` | Variables (purple)             |
 | `.label`    | `#666`    | Top-right label (small, gray)  |
+
+### Copy button (HTML view)
+
+`assets/copy.js` (canonical, loaded from the template head) injects a Copy
+button into the top-right of every `<pre>` in the HTML deliverable and shifts
+the `.label` left to make room. It is hidden in print (`@media print`), so the
+PDF never shows it. Do NOT hand-write buttons inside code blocks and do NOT
+inline extra `<script>` tags — `check_brand.py` fails anything but the
+canonical include.
 
 ### Inline Code
 ```html
@@ -206,22 +215,22 @@ Inline SVGs styled with the brand palette. No external images needed.
 ```html
 <div class="diagram-container">
   <div class="diagram-title">Diagram Title Here</div>
-  <svg viewBox="0 0 700 300" xmlns="http://www.w3.org/2000/svg" font-family="Inter, sans-serif">
+  <svg viewBox="0 0 700 300" xmlns="http://www.w3.org/2000/svg" font-family="Montserrat, sans-serif">
     <!-- Boxes -->
-    <rect x="10" y="60" width="180" height="100" rx="8" fill="#F5F0EA" stroke="#2D2D2D" stroke-width="2"/>
-    <text x="100" y="90" text-anchor="middle" font-weight="700" font-size="13" fill="#2D2D2D">Box Title</text>
-    <text x="100" y="110" text-anchor="middle" font-size="11" fill="#555">Subtitle</text>
+    <rect x="10" y="60" width="180" height="100" rx="8" fill="#F7F4EE" stroke="#313638" stroke-width="2"/>
+    <text x="100" y="90" text-anchor="middle" font-weight="700" font-size="13" fill="#313638">Box Title</text>
+    <text x="100" y="110" text-anchor="middle" font-size="11" fill="#6F7274">Subtitle</text>
 
     <!-- Arrows (dashed) -->
-    <line x1="190" y1="110" x2="350" y2="110" stroke="#2D2D2D" stroke-width="1.5" stroke-dasharray="6,4"/>
-    <polygon points="348,106 358,110 348,114" fill="#2D2D2D"/>
+    <line x1="190" y1="110" x2="350" y2="110" stroke="#313638" stroke-width="1.5" stroke-dasharray="6,4"/>
+    <polygon points="348,106 358,110 348,114" fill="#313638"/>
 
     <!-- Accent boxes (orange border) -->
-    <rect x="400" y="40" width="200" height="130" rx="8" fill="none" stroke="#E8611A" stroke-width="2" stroke-dasharray="6,3"/>
-    <text x="500" y="70" text-anchor="middle" font-weight="700" font-size="13" fill="#2D2D2D">Accent Box</text>
+    <rect x="400" y="40" width="200" height="130" rx="8" fill="none" stroke="#FF5500" stroke-width="2" stroke-dasharray="6,3"/>
+    <text x="500" y="70" text-anchor="middle" font-weight="700" font-size="13" fill="#313638">Accent Box</text>
 
     <!-- Flow labels (orange background) -->
-    <rect x="220" y="95" width="120" height="24" rx="4" fill="#E8611A"/>
+    <rect x="220" y="95" width="120" height="24" rx="4" fill="#FF5500"/>
     <text x="280" y="112" text-anchor="middle" font-size="10" fill="white" font-weight="600">1 Step Label</text>
   </svg>
 </div>
@@ -230,14 +239,14 @@ Inline SVGs styled with the brand palette. No external images needed.
 ### SVG Color Palette
 | Usage            | Fill/Stroke | Value     |
 |------------------|-------------|-----------|
-| Box fill         | fill        | `#F5F0EA` |
-| Box border       | stroke      | `#2D2D2D` |
-| Accent border    | stroke      | `#E8611A` |
-| Arrow lines      | stroke      | `#2D2D2D` |
-| Flow labels      | fill (bg)   | `#E8611A` |
-| Title text       | fill        | `#2D2D2D` |
+| Box fill         | fill        | `#F7F4EE` |
+| Box border       | stroke      | `#313638` |
+| Accent border    | stroke      | `#FF5500` |
+| Arrow lines      | stroke      | `#313638` |
+| Flow labels      | fill (bg)   | `#FF5500` |
+| Title text       | fill        | `#313638` |
 | Subtitle text    | fill        | `#555`    |
-| Accent text      | fill        | `#E8611A` |
+| Accent text      | fill        | `#FF5500` |
 | White on orange  | fill        | `white`   |
 
 ### Diagram Tips
@@ -250,20 +259,25 @@ Inline SVGs styled with the brand palette. No external images needed.
 
 ## Cover Page
 
-The cover is a full-bleed section with a dark gradient, geometric shapes, and the white logo.
+Full-bleed Illumio Orange with the isometric pattern strip. ALWAYS produced by
+`scripts/new_report.py` — never hand-typed. Shown here only so you can
+recognize the parts; do not deviate from this structure.
 
 ```html
-<div class="cover">
-  <div class="geo-1"></div><div class="geo-2"></div><div class="geo-3"></div>
-  <div class="dots"></div><div class="dots-2"></div>
-  <div class="cover-logo">
-    <img src="DATA_URI_WHITE_LOGO" alt="Illumio" class="cover-logo-img" style="height:40px;">
-  </div>
-  <h1>Document Title Here</h1>
-  <p class="subtitle">One-sentence description of the document purpose and audience.</p>
-  <div class="cover-meta">
-    <div class="cover-meta-item">Version<strong>1.0</strong></div>
-    <div class="cover-meta-item">Date<strong>Month Year</strong></div>
+<div class="cover">                      <!-- or cover cover--slate / cover--paper -->
+  <!-- cover-art div appears here ONLY when the user requested a strip
+       (new_report.py --cover-art builtin|file). Default: plain orange. -->
+  <div class="cover-content">
+    <div class="cover-logo">
+      <img src="assets/logo-white.png" alt="Illumio">   <!-- logo-dark.png on paper variant -->
+    </div>
+    <div class="cover-spacer"></div>
+    <h1>Document Title Here</h1>
+    <p class="subtitle">One-sentence bold description of purpose and audience.</p>
+    <p class="cover-byline">Author – Illumio Role</p>
+    <p class="cover-date">Month Year</p>
+    <p class="cover-disclaimer">Working guide prepared by the author — not an official Illumio, Inc. publication.</p>
+    <div class="cover-bottom-spacer"></div>
   </div>
   <div class="cover-footer">
     <span>&copy; 2026 Illumio, Inc. All Rights Reserved.</span>
@@ -271,6 +285,14 @@ The cover is a full-bleed section with a dark gradient, geometric shapes, and th
   </div>
 </div>
 ```
+
+Rules:
+- Default cover is PLAIN ORANGE — no decorative strip unless the user asks
+  (`--cover-art builtin` or an approved-imagery file); the logo is never optional
+- Title: Montserrat Light 300 — long Spanish titles wrap to a maximum of 3 lines
+- Subtitle: Bold 700, the "why it matters" sentence
+- Byline/date: exactly the values the user supplied (never invent an author)
+- The disclaimer line is inserted by the scaffolder (localized EN/ES/PT)
 
 ---
 
@@ -313,20 +335,20 @@ Each section consumes the matching id:
 ### CSS
 
 ```css
-.toc { padding: 36px 60px; background: var(--ill-cream); }
+.toc { padding: 36px 60px; background: var(--ill-mist); }
 .toc h2 { margin-bottom: 20px; }
 .toc-list { list-style: none; padding: 0; margin: 0; counter-reset: toc-num; }
 .toc-list li {
   counter-increment: toc-num;
   margin: 0;
   padding: 0;
-  border-bottom: 1px dashed var(--ill-cream-dark);
+  border-bottom: 1px dashed var(--ill-line);
 }
 .toc-list li a {
   display: flex;
   align-items: baseline;
   text-decoration: none;
-  color: var(--ill-charcoal);
+  color: var(--ill-slate);
   padding: 11px 0;
   font-size: 13.5px;
   font-weight: 500;
@@ -343,7 +365,7 @@ Each section consumes the matching id:
 .toc-list li a .toc-title { flex: 1; }
 .toc-list li a .toc-dots {
   flex: 0 1 auto;
-  color: var(--ill-cream-dark);
+  color: var(--ill-line);
   margin: 0 8px;
   overflow: hidden;
   white-space: nowrap;
@@ -389,48 +411,65 @@ Each section consumes the matching id:
 
 ## Footer
 
-Closing section with CTA and copyright.
+Closing CTA with pixel accent + copyright line.
 
 ```html
-<div style="margin-top:28px;padding:20px;background:var(--ill-charcoal);border-radius:10px;text-align:center;position:relative;overflow:hidden;">
-  <div style="position:absolute;top:-10px;right:30px;width:50px;height:100px;background:var(--ill-orange);transform:skewX(-8deg);opacity:0.12;"></div>
-  <p style="color:rgba(255,255,255,0.6);font-size:12px;margin-bottom:4px;">Questions? Contact your Illumio pre-sales engineer</p>
-  <p style="color:#fff;font-weight:700;font-size:14px;">We're here to support every phase of your deployment.</p>
+<div class="cta-box">
+  <svg class="px-accent" viewBox="0 0 34 34" xmlns="http://www.w3.org/2000/svg">
+    <rect x="0"  y="0"  width="10" height="10" fill="#FF5500"/>
+    <rect x="12" y="12" width="10" height="10" fill="#FF5500" opacity="0.7"/>
+    <rect x="24" y="0"  width="10" height="10" fill="#FF5500" opacity="0.45"/>
+    <rect x="24" y="24" width="10" height="10" fill="#FFFFFF" opacity="0.35"/>
+  </svg>
+  <p class="cta-sub">Questions? Contact your Illumio pre-sales engineer</p>
+  <p class="cta-main">We're here to support every phase of your deployment.</p>
 </div>
 <div class="content-footer">
   <span>&copy; 2026 Illumio, Inc. All Rights Reserved.</span>
 </div>
 ```
 
-<!-- BEGIN illumio-skill-update:docref-disclaimer -->
-## Inline documentation reference (`docref`)
+---
 
-One per section, linking the exact official source pages (validate every URL first).
+## Sources / Official-Doc Citations
 
-```html
-<div class="docref"><strong>Official documentation:</strong>
-  <a href="URL">Title</a> &middot; <a href="URL">Title</a></div>
-```
+> Legacy note: older documents used a `.docref` inline box for documentation
+> links. The class remains in report.css so old files still render, but NEW
+> documents must use `.ref-list` below (numbered, per-section, paper-readable).
 
-```css
-.docref{font-size:11.5px;color:#555;background:#FBF8F4;border-left:3px solid #E8611A;
-  padding:8px 13px;border-radius:0 6px 6px 0;margin:14px 0;break-inside:avoid;}
-.docref strong{color:#2D2D2D;}
-```
-
-## Disclaimer (non-official, customer-facing collateral)
+End every fact-bearing section with a `.ref-list`. URLs must be readable on
+paper (include the domain/path in the visible text). Inline markers use
+`<sup class="ref">`. Full protocol: `references/fact-verification.md`.
 
 ```html
-<div class="disclaimer"><div class="callout-label">Notice — unofficial document</div>
-  Support guide, not official Illumio documentation; does not replace it.</div>
+<p>El servicio del VEN es <code>venAgentMgrSvc</code><sup class="ref">1</sup>.</p>
+
+<div class="ref-list">
+  <div class="ref-title">Sources — official documentation</div>
+  <ol>
+    <li><a href="https://product-docs-repo.illumio.com/Tech-Docs/Core/25.x/...">
+        Illumio Core 25.x — VEN Administration —
+        product-docs-repo.illumio.com/Tech-Docs/Core/25.x/…</a></li>
+  </ol>
+</div>
 ```
 
-```css
-.disclaimer{border:1.5px solid #E8611A;background:#FDF1E8;border-radius:8px;
-  padding:14px 18px;margin:6px 0 18px;line-height:1.6;break-inside:avoid;}
-```
+---
 
-Cover fields to support: `disclaimer_short` (one line on the cover) and `tag`
-(e.g. "INTERNAL / CUSTOMER"). Keep the wording sober; one notice on the cover plus one
-after the TOC is enough.
-<!-- END illumio-skill-update:docref-disclaimer -->
+## Disclaimer (auto-inserted)
+
+`new_report.py` inserts a localized (EN/ES/PT) two-part disclaimer by default:
+a one-line `.cover-disclaimer` under the cover date, and an
+`.disclaimer` "About this document" block before the content footer stating
+the document is a working guide prepared by the author, not an official
+Illumio, Inc. publication, and that technical details must be validated
+against official documentation. Customize the objective with `--purpose`,
+override wording with `--disclaimer-text`, omit ONLY on explicit user request
+(`--no-disclaimer`). Do not reword it ad-hoc inside the HTML — regenerate.
+
+```html
+<div class="disclaimer">
+  <div class="disclaimer-title">Acerca de este documento</div>
+  <p>Esta guía fue preparada por … no constituye una publicación oficial de Illumio, Inc. …</p>
+</div>
+```

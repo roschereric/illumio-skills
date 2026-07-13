@@ -1,138 +1,104 @@
 # illumio-branded-reports
 
-An AI skill that generates professional, print-ready PDF and HTML documents using Illumio's visual identity. Give it a topic — a deployment guide, a technical brief, a runbook — and it produces a polished A4 document with branded cover pages, running headers, architecture diagrams, code blocks, callout boxes, and structured deployment phases.
+Print-ready A4 PDF + HTML reports in Illumio's **Orange & Slate** identity
+(2026 corporate-template look): clean full-bleed orange cover (optional
+isometric/imagery strip), Montserrat typography (bundled), running page
+headers, architecture diagrams, callouts, phase-based guides, per-section
+official-doc citations, a localized not-an-official-document disclaimer, and
+Copy buttons on code blocks in the HTML view (never in the PDF).
 
-Built for pre-sales engineers and technical teams who need to deliver customer-facing documentation that looks like it came from a design team, not a markdown renderer.
+Built for pre-sales collateral: deployment guides, runbooks, technical briefs,
+POC documents — EN/ES/PT.
 
-## What This Is For
+## Design: script-driven and fail-closed
 
-When you're working with an AI assistant and you say something like "create a deployment guide for VEN installation via GPO" or "build me a branded technical brief on Illumio CloudSecure," this skill takes over. Instead of getting a plain markdown file or a generic PDF, you get a document that:
+Earlier versions asked the model to "copy the template and keep the styling" —
+under long sessions models drift: they re-type the skeleton, regenerate logos,
+lose the CSS link. v2 removes that failure mode structurally:
 
-- Matches Illumio's brand identity (colors, typography, logo placement)
-- Prints cleanly on A4 with proper page breaks, running headers, and no orphaned headings
-- Includes architecture diagrams as inline SVGs (no external image dependencies)
-- Has syntax-highlighted code blocks, numbered step sequences, and callout boxes
-- Works as both a standalone HTML file and a PDF
+| Guarantee | Mechanism |
+|---|---|
+| Skeleton is never hand-written | `scripts/new_report.py` scaffolds every report; refuses to run if canonical assets are missing (ask the user, never improvise) |
+| CSS can't drift | `styles/report.css` is canonical; `scripts/check_brand.py` hash-verifies it (per-doc tweaks go in a size-capped `doc-overrides` block) |
+| Logos can't be faked | Both PNGs hash-checked against the official assets; CSS-filter recoloring and text wordmarks are lint failures |
+| Typography can't silently fall back | Montserrat + JetBrains Mono TTFs bundled in `assets/fonts/`; external font/CSS URLs are lint failures |
+| Facts can't ship unverified | `references/fact-verification.md` protocol + `.ref-list` citation component; lint warns on fact-heavy sections without sources |
+| Rendering defects can't ship | `scripts/render_report.py` (PDF + per-page PNGs) → `scripts/visual_verify.py` (Playwright checks) → mandatory page-by-page review |
 
-The skill is designed around the Illumio brand but is **parameterizable** — you can swap the color tokens, logos, and cover gradient to adapt it for any brand. The structural CSS (running headers, page breaks, component layout) stays the same regardless of branding.
+## Quickstart
 
-## Design Decisions
+```bash
+python scripts/new_report.py --out ./my-report \
+  --title "Guía de Despliegue VEN" --subtitle "Plan por fases" \
+  --author "Nombre – Illumio SE" --date "Julio 2026" --lang es
+# … edit my-report/report.html between the SECTION markers …
+python scripts/check_brand.py   my-report/report.html   # blocking gate
+python scripts/render_report.py my-report/report.html   # PDF + PNGs
+python scripts/visual_verify.py my-report/report.html   # blocking gate
+python scripts/export_standalone.py my-report/report.html # single-file HTML for sharing
+```
 
-A few choices that shaped how this skill works and why:
-
-**WeasyPrint over Chrome print.** The running header system uses CSS Paged Media (`position: running()`), which Chrome's print engine ignores entirely. WeasyPrint is the only Python-accessible renderer that supports this properly. This is a hard requirement, not a preference.
-
-**Lightweight HTML template with external assets.** The CSS and structural HTML live in a single `template.html` (~18KB), while logo images are stored as separate PNGs in `assets/`. This keeps the template small enough that AI assistants don't burn context tokens on base64 blobs. The `assets/` directory must travel alongside the HTML for WeasyPrint to resolve the image paths.
-
-**Sections as the unit of organization.** Each `<div class="section">` gets its own running header and page break. Phases, steps, and sub-content live *inside* sections, never as standalone sections. This keeps the running header meaningful (it always shows the parent section name, not a sub-phase).
-
-**Inline SVG for diagrams.** Rather than generating images with external tools and embedding them, diagrams are hand-coded SVG or converted from Excalidraw. This keeps everything self-contained, scalable, and editable without leaving the HTML file.
-
-**AI speech pattern avoidance.** The skill explicitly instructs the AI to avoid words like "leverages," "utilize," and "in order to." Customer-facing documents should read like a human wrote them.
-
-## Repository Structure
+## Repository structure
 
 ```
 illumio-branded-reports/
-├── SKILL.md                              ← Main skill instructions (the AI reads this)
-├── template.html                         ← HTML template with all CSS (~18KB, no base64)
-├── assets/                               ← Logo images referenced by template.html
-│   ├── logo-white.png                    ← White logo for cover page (dark backgrounds)
-│   └── logo-dark.png                     ← Dark logo for section running headers
-├── references/
-│   ├── branding-tokens.md                ← Full color palette, typography, spacing
-│   ├── css-print-architecture.md         ← Page margins, running headers, break rules
-│   ├── component-catalog.md              ← Callouts, code blocks, tables, steps, SVGs
-│   └── diagrams-guide.md                 ← Excalidraw workflow, hand-coded SVG, Mermaid
-├── adapters/                             ← Platform-specific adaptation notes
-│   └── README.md
-├── .gitignore
-└── README.md                             ← You are here
+├── SKILL.md                    ← workflow + hard rules (start here)
+├── template.html               ← canonical skeleton (placeholders, markers)
+├── styles/report.css           ← canonical CSS (hash-checked; FORKED-CSS marker for other brands)
+├── assets/
+│   ├── logo-white.png          ← official logo, dark/orange backgrounds
+│   ├── logo-dark.png           ← official logo, light backgrounds
+│   ├── cover-art.svg           ← optional isometric cover strip (--cover-art builtin)
+│   ├── copy.js                 ← canonical Copy-button script (HTML view only)
+│   └── fonts/                  ← Montserrat + JetBrains Mono TTFs (offline-safe)
+├── scripts/
+│   ├── new_report.py           ← fail-closed scaffolder
+│   ├── check_brand.py          ← brand-integrity lint (blocking)
+│   ├── render_report.py        ← WeasyPrint render + page PNGs
+│   ├── export_standalone.py    ← self-contained single-file HTML export
+│   ├── visual_verify.py        ← Playwright pre-flight (blocking)
+│   └── gen_cover_art.py        ← regenerate the default cover strip
+├── references/                 ← deep dives (brand tokens, print CSS, components,
+│   │                              diagrams, PII policy, fact verification, visual checks)
+├── evals/                      ← regression cases from real failures
+└── commands/                   ← /skill-update, /skill-status, /skill-publish
 ```
 
-The skill loads in three stages, from cheapest to most expensive:
+## Brand anchors
 
-1. **Metadata** — The `name` and `description` in SKILL.md frontmatter. This is all the AI reads to decide whether to activate the skill.
-2. **SKILL.md body** — The full instruction set: workflow, branding overview, document architecture, pitfalls.
-3. **References** — Deep-dive files loaded only when needed (e.g., the component catalog is read only when the AI is assembling content).
+Orange `#FF5500` · Slate `#313638` (the official "Orange and Slate" logo
+palette) · white pages · mist `#F7F4EE` panels · Montserrat (Light 300 titles,
+Bold 700 emphasis) · isometric pattern motif (official Pattern & Shape system). Full tokens:
+`references/branding-tokens.md`.
 
-## How to Use
+## Changelog
 
-### With Claude Cowork (Desktop App)
+### v2.1.0 — 2026-07-13
+- Cover simplified: plain full-bleed Illumio Orange by default; decorative/imagery strip is now opt-in (`--cover-art builtin|<file>`)
+- Localized disclaimer (EN/ES/PT) ON by default — cover line + "About this document" end matter stating the report is a working guide, not an official Illumio, Inc. publication; tune with `--purpose` / `--disclaimer-text`, omit only via explicit `--no-disclaimer` (lint warns)
+- Copy buttons on code blocks in the HTML view via canonical `assets/copy.js` (hash-checked; hidden in print; lint rejects any other `<script>`)
+- New `scripts/export_standalone.py` — single-file HTML with CSS/fonts/logos/JS inlined; survives double-click from macOS-protected folders (e.g. Downloads) and email forwarding
+- Brand tokens verified against the official Illumio Brand Hub (Frontify): Server Slate tint scale, System Cyan, Zero Trust Tan, Cloud Cerulean, Circuit Gold, Safeguard Green / Risk Red diagram semantics; Montserrat confirmed as the sanctioned self-publishing typeface (FK Grotesk licensure documented — never bundled/embedded); official logo rules encoded (4:1 ratio, clear space, four variants)
+- Default cover-art generator rebuilt on the official isometric Pattern & Shape primitives (rhombus grid, containers, accent lines)
 
-Cowork discovers skills from the `.claude/skills/` directory inside your mounted workspace folder.
+### v2.0.0 — 2026-07-12
+- Script-driven, fail-closed pipeline: `new_report.py` (refuses to scaffold without canonical assets — ask the user, never improvise), `check_brand.py` (blocking lint: CSS/logo/font hash checks, forbidden patterns, placeholder detection), `render_report.py` (PDF + per-page PNGs in one command)
+- Montserrat + JetBrains Mono bundled in `assets/fonts/` — zero network at render time (kills the silent font-fallback failure)
+- 2026 cover design in official Orange & Slate (#FF5500 / #313638); retired the legacy gradient/parallelogram cover and the #E8611A palette
+- Anti-hallucination layer: `references/fact-verification.md` protocol (claims inventory → verify against current official docs → cite/`<TO-VERIFY>`/cut; diagrams are claims too) + `.ref-list` component printing full source URLs per section
+- SKILL.md restructured for model reliability: six hard rules up front, blocking exit-code gates, stop-and-ask escalation protocol, final pre-delivery checklist
 
-**Option A — Symlink (recommended):**
-Clone this repo into your skills workspace, then symlink it:
+### v1.0.0
+- Initial release: WeasyPrint CSS Paged Media system (running headers, page breaks, code-multipart), component catalog, PII policy, Playwright visual pre-flight, regression evals
 
-```bash
-cd ~/Projects/Illumio\ Skills
-git clone https://github.com/roschereric/illumio-branded-reports.git
-mkdir -p .claude/skills
-ln -sf ../../illumio-branded-reports .claude/skills/illumio-branded-reports
-```
+## Updating / publishing
 
-Then mount `Illumio Skills/` in Cowork. The skill appears automatically.
+- `/skill-update` — pull latest from GitHub (also auto-runs on session start)
+- `/skill-status` — local vs origin drift report
+- `/skill-publish` — commit + push / open a PR with your changes
 
-**Option B — Direct placement:**
-Clone directly into the `.claude/skills/` directory of whatever folder you mount in Cowork.
+## Requirements
 
-Once installed, just ask naturally: *"Create a deployment guide for Illumio VEN installation via GPO"* — the skill triggers from the description and handles the rest.
-
-### With Claude Code (CLI)
-
-Claude Code reads skills from `.claude/skills/` in the project root or `~/.claude/skills/` globally.
-
-**Per-project install:**
-```bash
-cd /path/to/your/project
-mkdir -p .claude/skills
-ln -sf /path/to/illumio-branded-reports .claude/skills/illumio-branded-reports
-```
-
-**Global install (available in all projects):**
-```bash
-ln -sf /path/to/illumio-branded-reports ~/.claude/skills/illumio-branded-reports
-```
-
-The skill format is identical for Cowork and Claude Code — no changes needed. The only difference is that Claude Code has full terminal access, so PDF generation via WeasyPrint runs directly in the CLI.
-
-### With Other Platforms
-
-This skill is portable to any AI platform that accepts system prompts or custom instructions. The core idea: **SKILL.md is a structured prompt, and the reference files are supporting context**. Adapting to another platform means reformatting that content for the target's prompt injection mechanism.
-
-See the `adapters/` directory for platform-specific notes. The general approach:
-
-1. Flatten SKILL.md + the relevant reference files into a single document
-2. Remove Claude-specific references (tool names, file paths)
-3. Add platform-specific framing ("You are an assistant that...")
-4. Test with a few representative prompts
-
-Platforms with code execution (Gemini, ChatGPT, Codex) can run the full WeasyPrint workflow. Platforms without code execution can still generate the HTML — the user just needs to convert to PDF locally.
-
-For the full cross-platform guide, see `_guides/platform-adaptation.md` in the [Skills Lab](https://github.com/roschereric) workspace.
-
-## Dependencies
-
-The skill itself has no dependencies — it's just markdown files and an HTML template. PDF generation requires:
-
-- **Python 3.8+**
-- **WeasyPrint**: `pip install weasyprint`
-
-WeasyPrint needs some system libraries (Cairo, Pango, GDK-PixBuf). On macOS: `brew install cairo pango gdk-pixbuf libffi`. On Ubuntu: `apt install libcairo2 libpango-1.0-0 libgdk-pixbuf2.0-0`.
-
-## Adapting for Another Brand
-
-The template is built around Illumio's identity but designed to be re-skinned:
-
-1. Replace CSS custom properties in `:root` with the target brand's colors
-2. Replace the logo files in `assets/` (`logo-white.png` and `logo-dark.png`) with the target brand's logos
-3. Adjust the cover gradient in `.cover { background: linear-gradient(...) }`
-4. Update geometric shapes (`.geo-1`, `.geo-2`, `.geo-3`) or remove them
-5. Update the footer copyright text
-
-The structural CSS — running headers, page breaks, component layout — stays unchanged. You're changing the paint, not the architecture.
-
-## License
-
-Private. For authorized use only.
+Python 3.9+, `weasyprint`, `poppler-utils` (or `pdf2image`), `playwright`
+(+ chromium) for the visual pre-flight. The scripts print exact install
+commands when something is missing.
