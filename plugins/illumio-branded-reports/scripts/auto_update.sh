@@ -46,7 +46,7 @@ cd "$MARKETPLACE_ROOT" 2>/dev/null || {
 if [ ! -d ".git" ]; then
   log "no .git directory at marketplace root; aborting"
   exit 0
-}
+fi
 
 # Skip if working tree is dirty.
 if ! git diff --quiet --ignore-submodules HEAD 2>/dev/null; then
